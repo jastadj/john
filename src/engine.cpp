@@ -21,6 +21,13 @@ Engine::Engine()
 Engine::~Engine()
 {
     delete m_Player;
+
+    // shutdown curses
+    echo();
+    curs_set(1);
+    clear();
+    endwin();
+    
 }
 
 Engine *Engine::getInstance()
