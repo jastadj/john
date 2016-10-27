@@ -12,6 +12,19 @@ public:
     int y;
 };
 
+class recti
+{
+public:
+    recti();
+    recti(int nx, int ny, int nwidth, int nheight);
+    ~recti();
+
+    int x;
+    int y;
+    int width;
+    int height;
+};
+
 float getDistance(int x1, int y1, int x2, int y2);
 
 #endif // CLASS_TOOLS

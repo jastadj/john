@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "engine.hpp"
+#include "tools.hpp"
 
 Console *Console::m_Instance = NULL;
 
@@ -110,27 +111,8 @@ void Console::openConsole()
     {
         clear();
 
-        // print buffer
-        for(int i = 0; i < int(m_Buffer.size()); i++)
-        {
-            switch( m_Buffer[i].m_Type)
-            {
-            case ConsoleElement::TYPE_TEXT:
-                printw("%s", m_Buffer[i].m_Text.c_str());
-                break;
-            case ConsoleElement::TYPE_COLOR:
-                eptr->setColor( m_Buffer[i].foreground, m_Buffer[i].background, m_Buffer[i].color_bold);
-                break;
-            case ConsoleElement::TYPE_CLEARCOLOR:
-                eptr->colorOff();
-                break;
-            default:
-                break;
-            }
-        }
+        printConsoleEvents(&m_Buffer);
 
-        // clear colors
-        clearColor();
 
         // print prompt and active input
         printw("%s%s", m_PromptString.c_str(), command.c_str());
@@ -167,12 +149,14 @@ void Console::openConsole()
     }
 }
 
-void Console::print(std::string str)
+void Console::print(std::string str, std::string textend)
 {
     // create a console event for text
     ConsoleElement newelement;
     newelement.m_Type = ConsoleElement::TYPE_TEXT;
-    newelement.m_Text = std::string(str + "\n");
+    newelement.m_Text = std::string(str);
+    newelement.m_TextEnd = textend;
+
     m_Buffer.push_back(newelement);
 }
 
@@ -194,6 +178,7 @@ void Console::clearColor()
     newelement.m_Type = ConsoleElement::TYPE_CLEARCOLOR;
     m_Buffer.push_back(newelement);
 }
+
 bool Console::parseCommand(std::string tstr)
 {
     std::vector<std::string> cmd;
@@ -286,6 +271,40 @@ const Command *Console::findCommand( std::vector<std::string> *cmd)
 
 ////////////////////////////////////////////////////////////////
 //
+
+void printConsoleEvents(std::vector<ConsoleElement> *tlist, recti *trect)
+{
+    Engine *eptr = Engine::getInstance();
+
+    // offset console printing within this rect
+    recti crect(0,0,80,25);
+
+    if(trect != NULL) crect = *trect;
+
+    move(crect.y, crect.x);
+
+    // print buffer
+    for(int i = 0; i < int(tlist->size()); i++)
+    {
+        switch( (*tlist)[i].m_Type)
+        {
+        case ConsoleElement::TYPE_TEXT:
+            printw("%s%s", (*tlist)[i].m_Text.c_str(), (*tlist)[i].m_TextEnd.c_str());
+            break;
+        case ConsoleElement::TYPE_COLOR:
+            eptr->setColor( (*tlist)[i].foreground, (*tlist)[i].background, (*tlist)[i].color_bold);
+            break;
+        case ConsoleElement::TYPE_CLEARCOLOR:
+            eptr->colorOff();
+            break;
+        default:
+            break;
+        }
+    }
+
+    // clear colors
+    eptr->colorOff();
+}
 
 bool printMenuHelp(const Command *tcmd)
 {

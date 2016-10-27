@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+// forward decl
+class recti;
+
 class Command
 {
 private:
@@ -38,6 +41,7 @@ struct ConsoleElement
 
     E_TYPE m_Type;
     std::string m_Text;
+    std::string m_TextEnd;
     int foreground;
     int background;
     bool color_bold;
@@ -63,7 +67,7 @@ public:
     static Console *getInstance();
 
     void openConsole();
-    void print(std::string str);
+    void print(std::string str, std::string textend = "\n");
     void setColor(int foreground, int background = COLOR_BLACK, bool bold=false);
     void clearColor();
 
@@ -72,6 +76,8 @@ public:
     const std::vector<Command*> *getCommands() { return &m_CommandList;}
     const Command *findCommand(std::vector<std::string> *cmd);
 };
+
+void printConsoleEvents(std::vector<ConsoleElement> *tlist, recti *trect = NULL);
 
 // commands
 bool printMenuHelp(const Command *tcmd = NULL);
