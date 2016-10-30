@@ -4,6 +4,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <stdarg.h>
+
 #include "engine.hpp"
 #include "tools.hpp"
 
@@ -104,8 +106,6 @@ void Console::openConsole()
     std::string command;
     int ch = 0;
 
-    Engine *eptr = Engine::getInstance();
-
     // set curses console environment
     curs_set(1);
     echo();
@@ -153,9 +153,13 @@ void Console::openConsole()
     }
 }
 
-void Console::print(std::string str, COLOR tcolor, std::string textend)
+void Console::print(std::string str, ...)
 {
-    addMessage(&m_Buffer, str, tcolor, textend);
+    va_list v;
+    va_start(v, str);
+    va_end(v);
+
+    addMessageV(&m_Buffer, str, v);
 }
 
 
@@ -270,6 +274,7 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
         ConsoleElement tmsg = *(*tlist)[i];
 
         // configure message color
+        /*
         chtype attr = A_NORMAL;
         if(tmsg.m_Color.m_Bold) attr = A_BOLD;;
         attr = attr | COLOR_PAIR( eptr->getColorPair(tmsg.m_Color) );
@@ -286,23 +291,53 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
             int clip = xpos + textlen - maxwidth;
             tmsg.m_Text.erase( tmsg.m_Text.end()-clip, tmsg.m_Text.end());
         }
-
-        attron( attr);
-        printw("%s%s", tmsg.m_Text.c_str(), tmsg.m_TextEnd.c_str());
-        attroff(attr);
+        */
+        //attron( attr);
+        printw("%s\n", tmsg.m_Text.c_str());
+        //attroff(attr);
     }
 
 }
 
-void addMessage(std::vector<ConsoleElement*> *tlist, std::string str, COLOR tcolor, std::string textend)
+bool addMessage(std::vector<ConsoleElement*> *tlist, std::string str, ...)
+{
+    va_list v;
+    va_start(v, str);
+    va_end(v);
+    addMessageV(tlist, str, v);
+}
+
+bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v)
 {
     // create a console event for text
     ConsoleElement *newelement = new ConsoleElement;
     newelement->m_Text = std::string(str);
-    newelement->m_TextEnd = textend;
-    newelement->m_Color = tcolor;
+
+    // get argument count
+    size_t pos = 0;
+    int argcount = 0;
+
+    while(pos >=0 && pos <= str.length())
+    {
+        pos = str.find("%", pos);
+
+        // argument found
+        if(pos >= 0 && pos <= str.length())
+        {
+            newelement->m_Args.push_back(va_arg(v, int));
+        }
+    }
+
+    // invalid argument count
+    if(argcount != int(newelement->m_Args.size()) )
+    {
+        delete newelement;
+        return false;
+    }
 
     tlist->push_back(newelement);
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////

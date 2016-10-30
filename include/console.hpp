@@ -39,8 +39,7 @@ public:
 struct ConsoleElement
 {
     std::string m_Text;
-    std::string m_TextEnd;
-    COLOR m_Color;
+    std::vector<int> m_Args;
 };
 
 class Console
@@ -63,7 +62,7 @@ public:
     static Console *getInstance();
 
     void openConsole();
-    void print(std::string str, COLOR tcolor = COLOR(), std::string textend = "\n");
+    void print(std::string str, ...);
 
     bool parseCommand(std::string tstr);
 
@@ -72,7 +71,8 @@ public:
 };
 
 void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect = NULL);
-void addMessage(std::vector<ConsoleElement*> *tlist, std::string str, COLOR tcolor = COLOR(), std::string textend = "\n");
+bool addMessage(std::vector<ConsoleElement*> *tlist, std::string str, ...);
+bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v);
 
 // commands
 bool printMenuHelp(const Command *tcmd = NULL);
