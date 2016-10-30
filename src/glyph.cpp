@@ -5,10 +5,8 @@
 
 glyph::glyph()
 {
-    character = '?';
-    bold = false;
-    foreground = COLOR_WHITE;
-    background = COLOR_BLACK;
+    m_Character = '?';
+    m_Color = COLOR();
 }
 
 glyph::~glyph()
@@ -16,25 +14,21 @@ glyph::~glyph()
 
 }
 
+void glyph::draw(int x, int y)
+{
+    Engine *eptr = Engine::getInstance();
+    int cpair = eptr->getColorPair( m_Color);
+    mvaddch(y, x, m_Character);
+}
+
 void glyph::printInfo()
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
 
-    console->setColor(foreground, background, bold);
     std::stringstream ss;
-    ss << "Glyph Char:" << char(character);
-    console->clearColor();
+    ss << "Glyph Char:" << char(m_Character);
     console->print(ss.str());
     ss.str(std::string());
-    eptr->colorOff();
 
-
-/*
-
-    ss << "Position:" << m_Position.x << "," << m_Position.y;
-    console->print(ss.str() );
-
-    ss.str(std::string());
-    */
 }

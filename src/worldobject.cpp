@@ -25,9 +25,8 @@ void WorldObject::setPosition(int nx, int ny)
 
 void WorldObject::setColors(int foreground, int background, bool bold)
 {
-    m_Glyph.foreground = foreground;
-    m_Glyph.background = background;
-    m_Glyph.bold = bold;
+    COLOR tcolor(foreground, background, bold);
+    m_Glyph.m_Color = tcolor;
 }
 
 void WorldObject::printInfo()

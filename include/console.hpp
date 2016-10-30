@@ -4,6 +4,7 @@
 #include "curses.h"
 #include <string>
 #include <vector>
+#include "color.hpp"
 
 // forward decl
 class recti;
@@ -37,14 +38,9 @@ public:
 
 struct ConsoleElement
 {
-    enum E_TYPE{TYPE_TEXT, TYPE_COLOR, TYPE_CLEARCOLOR};
-
-    E_TYPE m_Type;
     std::string m_Text;
     std::string m_TextEnd;
-    int foreground;
-    int background;
-    bool color_bold;
+    COLOR m_Color;
 };
 
 class Console
@@ -59,7 +55,7 @@ private:
     std::vector<Command*> m_CommandList;
 
     std::string m_PromptString;
-    std::vector<ConsoleElement> m_Buffer;
+    std::vector<ConsoleElement*> m_Buffer;
 
 
 
@@ -67,9 +63,7 @@ public:
     static Console *getInstance();
 
     void openConsole();
-    void print(std::string str, std::string textend = "\n");
-    void setColor(int foreground, int background = COLOR_BLACK, bool bold=false);
-    void clearColor();
+    void print(std::string str, COLOR tcolor = COLOR(), std::string textend = "\n");
 
     bool parseCommand(std::string tstr);
 
@@ -77,7 +71,8 @@ public:
     const Command *findCommand(std::vector<std::string> *cmd);
 };
 
-void printConsoleEvents(std::vector<ConsoleElement> *tlist, recti *trect = NULL);
+void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect = NULL);
+void addMessage(std::vector<ConsoleElement*> *tlist, std::string str, COLOR tcolor = COLOR(), std::string textend = "\n");
 
 // commands
 bool printMenuHelp(const Command *tcmd = NULL);
@@ -86,6 +81,7 @@ void itemMenu(std::vector<std::string> *cmd);
 void showItemInfo(std::vector<std::string> *cmd);
 void printItemList(std::vector<std::string> *cmd);
 void mytest(std::vector<std::string> *cmd);
+void colortest(std::vector<std::string> *cmd);
 void dbgClip(std::vector<std::string> *cmd);
 void dbgLOS(std::vector<std::string> *cmd);
 void dbgLighting(std::vector<std::string> *cmd);

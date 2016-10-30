@@ -27,7 +27,7 @@ Engine::~Engine()
     curs_set(1);
     clear();
     endwin();
-    
+
 }
 
 Engine *Engine::getInstance()
@@ -44,6 +44,7 @@ void Engine::start()
 {
     initCurses();
     initConsole();
+    if(ENABLE_COLOR) initColors();
     initTiles();
     initItems();
 
@@ -54,6 +55,8 @@ void Engine::start()
 
 bool Engine::initCurses()
 {
+    static bool initialized = false;
+    if(initialized) return false;
 
     // initialize screen
     initscr();
@@ -61,29 +64,7 @@ bool Engine::initCurses()
     // allow extended keys
     keypad(stdscr, TRUE);
 
-
-
-    // if color is enabled
-    if(ENABLE_COLOR)
-    {
-        // color init
-        start_color();
-
-        // create color pairs in color table
-        for(int i = 0; i < MAX_COLORS; i++)
-        {
-            m_ColorTable.resize( m_ColorTable.size() + 1);
-
-            for(int n = 0; n < MAX_COLORS; n++)
-            {
-                int colorpair = ( i * MAX_COLORS) + n;
-
-                init_pair(colorpair, n, i);
-                m_ColorTable[i].push_back( colorpair);
-            }
-        }
-    }
-
+    initialized = true;
     return true;
 }
 
@@ -96,26 +77,58 @@ bool Engine::initConsole()
     return true;
 }
 
+bool Engine::initColors()
+{
+    static bool initialized = false;
+
+    if(initialized) return false;
+
+    // color init
+    start_color();
+
+    // create color pairs in color table
+    for(int i = 0; i < MAX_COLORS; i++)
+    {
+        m_ColorTable.resize( m_ColorTable.size() + 1);
+
+        for(int n = 0; n < MAX_COLORS; n++)
+        {
+            int colorpair = ( i * MAX_COLORS) + n;
+
+            init_pair(colorpair, n, i);
+            m_ColorTable[i].push_back( colorpair);
+
+        }
+    }
+
+    initialized = true;
+
+    return true;
+}
+
 bool Engine::initTiles()
 {
+    static bool initialized = false;
+    if(initialized) return false;
+
     m_Console->print("Loading tiles...");
     // tile 0 = not used, index 0 should be no tile data
     Tile newtile;
-    newtile.m_Glyph.character = '!';
+    newtile.m_Glyph.m_Character = '!';
     newtile.m_IsWalkable = false;
     newtile.m_Name = "NO TILE!\n";
     m_Tiles.push_back(newtile);
 
     // tile 1 = wall
     newtile = Tile();
-    newtile.m_Glyph.character = chtype(219);
+    newtile.m_Glyph.m_Character = chtype(219);
     newtile.m_IsWalkable = false;
     newtile.m_Name = "wall";
     m_Tiles.push_back(newtile);
 
     // tile 2 = floor
     newtile = Tile();
-    newtile.m_Glyph.character = '.';
+    newtile.m_Glyph.m_Character = '.';
     newtile.m_IsWalkable = true;
     newtile.m_Name = "floor";
     m_Tiles.push_back(newtile);
@@ -124,11 +137,15 @@ bool Engine::initTiles()
     msg << m_Tiles.size() << " tiles loaded.";
     m_Console->print(msg.str());
 
+    initialized = true;
     return true;
 }
 
 bool Engine::initItems()
 {
+    static bool initialized = false;
+    if(initialized) return false;
+
     m_Console->print("Loading items...");
 
     Item *newitem = new Item;
@@ -143,6 +160,7 @@ bool Engine::initItems()
     msg << m_Items.size() << " items loaded.";
     m_Console->print(msg.str());
 
+    initialized = true;
     return true;
 }
 
@@ -153,6 +171,10 @@ void Engine::clearGame()
     // clear player data
     if(m_Player != NULL) delete m_Player;
     m_Player = NULL;
+
+    // clear message log
+    for(int i = 0; i < int(m_MessageLog.size()); i++) delete m_MessageLog[i];
+    m_MessageLog.clear();
 
     // clear map data
     if(!m_Levels.empty())
@@ -202,6 +224,12 @@ void Engine::newGame()
     m_Camera.setWorldPosition(0,0);
     m_Camera.setCenter(playerpos);
 
+    addMessage(&m_MessageLog, "Welcome!");
+    addMessage(&m_MessageLog, "this is a test", COLOR(COLOR_RED, COLOR_BLACK, false));
+    addMessage(&m_MessageLog, "and another..", COLOR(COLOR_BLUE, COLOR_BLACK, true));
+    addMessage(&m_MessageLog, "and another..", COLOR(COLOR_BLUE, COLOR_BLACK, true));
+    addMessage(&m_MessageLog, "and another..", COLOR(COLOR_BLUE, COLOR_BLACK, true));
+    addMessage(&m_MessageLog, "and the last message", COLOR(COLOR_BLUE, COLOR_BLACK, true));
 }
 
 void Engine::setMainLoopEnvironment()
@@ -218,6 +246,9 @@ void Engine::mainLoop()
     bool quit = false;
     int ch = 0;
 
+    recti messagelogrect(0, 20, 80, 4);
+
+
     // set curses environment options for main game
     setMainLoopEnvironment();
 
@@ -227,6 +258,7 @@ void Engine::mainLoop()
     {
         // clear screen
         clear();
+        attron( COLOR_PAIR( m_ColorTable[COLOR_BLACK][COLOR_WHITE]) | A_NORMAL);
 
         // update
         vector2i playerpos = m_Player->getPosition();
@@ -235,10 +267,11 @@ void Engine::mainLoop()
         // draw
         drawCamera(&m_Camera);
 
+        // draw message log
+        printMessages(&m_MessageLog, &messagelogrect);
+
         // debug
-        setColor(COLOR_RED, COLOR_BLACK, false);
         mvprintw(0,0, "key:%d", ch);
-        colorOff();
 
         // get input
         ch = getch();
@@ -247,9 +280,6 @@ void Engine::mainLoop()
         if(ch == 27) quit = true;
         else if( ch == 96) // ~
         {
-            // clear colors
-            colorOff();
-
             m_Console->openConsole();
 
             // set the curses environment back
@@ -342,14 +372,14 @@ void Engine::drawCamera(Camera *tcamera)
 
             // draw
             //mvaddch(drawpos.y, drawpos.x, ttile);
-            drawGlyph(m_Tiles[tileindex].m_Glyph, drawpos.x, drawpos.y);
+            m_Tiles[tileindex].m_Glyph.draw(drawpos.x, drawpos.y);
 
             //draw items
             std::vector<const Item*> ilist = tmap->getItemsAt(n, i);
             for(int k = 0; k < int(ilist.size()); k++)
             {
                 glyph tglyph = ilist[k]->getGlyph();
-                drawGlyph(tglyph, drawpos.x, drawpos.y);
+                tglyph.draw(drawpos.x, drawpos.y);
             }
         }
     }
@@ -359,8 +389,7 @@ void Engine::drawCamera(Camera *tcamera)
     if(tcamera->PositionInView(playerpos))
     {
         vector2i playerposscr = tcamera->PositionToScreen(playerpos);
-        //mvaddch(playerposscr.y, playerposscr.x, m_Player->getIcon());
-        drawGlyph(m_Player->getGlyph(), playerposscr.x, playerposscr.y);
+        m_Player->getGlyph().draw(playerposscr.x, playerposscr.y);
     }
 
 
@@ -480,12 +509,7 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
 
     return true;
 }
-void Engine::drawGlyph(glyph tglyph, int x, int y)
-{
-    setColor(tglyph.foreground, tglyph.background, tglyph.bold);
 
-    mvaddch(y, x, tglyph.character);
-}
 
 bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 {
@@ -635,35 +659,6 @@ bool Engine::generateLevel(Map *tmap)
     return true;
 }
 
-bool Engine::setColor(int foreground, int background, bool bold)
-{
-    if(!ENABLE_COLOR) return false;
-
-    if(foreground < 0 || foreground >= MAX_COLORS ||
-       background < 0 || background >= MAX_COLORS)
-        return false;
-
-    if(bold)
-    {
-        // set color and bold attributes
-        attron( COLOR_PAIR( m_ColorTable[background][foreground]) | A_BOLD);
-    }
-    else
-    {
-        // set color
-        attron( COLOR_PAIR( m_ColorTable[background][foreground]));
-
-        // ensure bold is disabled
-        attroff(A_BOLD);
-    }
-
-    return true;
-}
-
-void Engine::colorOff()
-{
-    setColor(COLOR_WHITE, COLOR_BLACK, false);
-}
 
 Item *Engine::newItem(int itmindex)
 {
@@ -700,6 +695,17 @@ bool Engine::addItemToMap(Map *tlevel, Item *titem, int x, int y)
     tlevel->addItem(titem);
 
     return true;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+
+int Engine::getColorPair(COLOR tcolor)
+{
+    if(tcolor.m_Foreground < 0 || tcolor.m_Background < 0 ||
+       tcolor.m_Foreground >= MAX_COLORS || tcolor.m_Background >= MAX_COLORS)
+        return 0;
+    else return m_ColorTable[tcolor.m_Background][tcolor.m_Foreground];
 }
 
 /////////////////////////////////////////////////////////////////

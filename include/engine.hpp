@@ -6,6 +6,7 @@
 #include <time.h>
 #include "curses.h"
 
+#include "color.hpp"
 #include "map.hpp"
 #include "camera.hpp"
 #include "console.hpp"
@@ -32,6 +33,7 @@ private:
     // init
     bool initCurses();
     bool initConsole();
+    bool initColors();
     bool initTiles();
     bool initItems();
 
@@ -52,6 +54,7 @@ private:
     Actor *m_Player;
     int m_CurrentLevel;
     std::vector<Map*> m_Levels;
+    std::vector<ConsoleElement*> m_MessageLog;
 
     // main
     void mainLoop();
@@ -79,12 +82,14 @@ public:
 
     void start();
 
-    bool setColor(int foreground, int background, bool bold);
-    void colorOff();
-
-    void drawGlyph(glyph tglyph, int x, int y);
-
+    // get stuff from main engine
+    //std::vector< std::vector<int> > *getColorTable() { return &m_ColorTable;}
+    int getColorPair(COLOR tcolor);
     const std::vector<Item*> *getItemList() { return &m_Items;}
+
+
+
+
 
     // debug
     bool toggleDebug(E_DEBUG dtype);

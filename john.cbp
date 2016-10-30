@@ -37,6 +37,7 @@
 		</Linker>
 		<Unit filename="include/actor.hpp" />
 		<Unit filename="include/camera.hpp" />
+		<Unit filename="include/color.hpp" />
 		<Unit filename="include/console.hpp" />
 		<Unit filename="include/engine.hpp" />
 		<Unit filename="include/glyph.hpp" />

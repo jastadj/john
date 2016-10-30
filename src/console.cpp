@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 #include "engine.hpp"
 #include "tools.hpp"
@@ -91,6 +92,9 @@ bool Console::initCommands()
     newcmd = new Command(Command::C_CMD, "test", "A test", &mytest);
     m_CommandList.push_back(newcmd);
 
+    newcmd = new Command(Command::C_CMD, "colortest", "Show color table", &colortest);
+    m_CommandList.push_back(newcmd);
+
     return true;
 }
 
@@ -111,7 +115,7 @@ void Console::openConsole()
     {
         clear();
 
-        printConsoleEvents(&m_Buffer);
+        printMessages(&m_Buffer);
 
 
         // print prompt and active input
@@ -149,35 +153,11 @@ void Console::openConsole()
     }
 }
 
-void Console::print(std::string str, std::string textend)
+void Console::print(std::string str, COLOR tcolor, std::string textend)
 {
-    // create a console event for text
-    ConsoleElement newelement;
-    newelement.m_Type = ConsoleElement::TYPE_TEXT;
-    newelement.m_Text = std::string(str);
-    newelement.m_TextEnd = textend;
-
-    m_Buffer.push_back(newelement);
+    addMessage(&m_Buffer, str, tcolor, textend);
 }
 
-void Console::setColor(int foreground, int background, bool bold)
-{
-    // create a console event to change the console color
-    ConsoleElement newelement;
-    newelement.m_Type = ConsoleElement::TYPE_COLOR;
-    newelement.foreground = foreground;
-    newelement.background = background;
-    newelement.color_bold = bold;
-    m_Buffer.push_back(newelement);
-}
-
-void Console::clearColor()
-{
-    // reset console colors to plain
-    ConsoleElement newelement;
-    newelement.m_Type = ConsoleElement::TYPE_CLEARCOLOR;
-    m_Buffer.push_back(newelement);
-}
 
 bool Console::parseCommand(std::string tstr)
 {
@@ -272,7 +252,7 @@ const Command *Console::findCommand( std::vector<std::string> *cmd)
 ////////////////////////////////////////////////////////////////
 //
 
-void printConsoleEvents(std::vector<ConsoleElement> *tlist, recti *trect)
+void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
 {
     Engine *eptr = Engine::getInstance();
 
@@ -286,26 +266,47 @@ void printConsoleEvents(std::vector<ConsoleElement> *tlist, recti *trect)
     // print buffer
     for(int i = 0; i < int(tlist->size()); i++)
     {
-        switch( (*tlist)[i].m_Type)
+        // get local copy of message for printing and formatting
+        ConsoleElement tmsg = *(*tlist)[i];
+
+        // configure message color
+        chtype attr = A_NORMAL;
+        if(tmsg.m_Color.m_Bold) attr = A_BOLD;;
+        attr = attr | COLOR_PAIR( eptr->getColorPair(tmsg.m_Color) );
+
+        // get dimensions of text to see if it fits within rect
+        int xpos = getcurx(stdscr);
+        int ypos = getcury(stdscr);
+        int maxwidth = crect.width - xpos;
+        int textlen = tmsg.m_Text.length();
+
+        // if text doesn't fit within length, trim off the end
+        if(textlen + xpos >= maxwidth)
         {
-        case ConsoleElement::TYPE_TEXT:
-            printw("%s%s", (*tlist)[i].m_Text.c_str(), (*tlist)[i].m_TextEnd.c_str());
-            break;
-        case ConsoleElement::TYPE_COLOR:
-            eptr->setColor( (*tlist)[i].foreground, (*tlist)[i].background, (*tlist)[i].color_bold);
-            break;
-        case ConsoleElement::TYPE_CLEARCOLOR:
-            eptr->colorOff();
-            break;
-        default:
-            break;
+            int clip = xpos + textlen - maxwidth;
+            tmsg.m_Text.erase( tmsg.m_Text.end()-clip, tmsg.m_Text.end());
         }
+
+        attron( attr);
+        printw("%s%s", tmsg.m_Text.c_str(), tmsg.m_TextEnd.c_str());
+        attroff(attr);
     }
 
-    // clear colors
-    eptr->colorOff();
 }
 
+void addMessage(std::vector<ConsoleElement*> *tlist, std::string str, COLOR tcolor, std::string textend)
+{
+    // create a console event for text
+    ConsoleElement *newelement = new ConsoleElement;
+    newelement->m_Text = std::string(str);
+    newelement->m_TextEnd = textend;
+    newelement->m_Color = tcolor;
+
+    tlist->push_back(newelement);
+}
+
+////////////////////////////////////////////////////////////////
+//
 bool printMenuHelp(const Command *tcmd)
 {
     Console *console = Console::getInstance();
@@ -331,8 +332,8 @@ bool printMenuHelp(const Command *tcmd)
     std::string menutitlesub;
     for(int i = 0; i < menutitle.length(); i++) menutitlesub.append("-");
 
-    console->print(menutitle);
-    console->print(menutitlesub);
+    console->print(menutitle, COLOR(COLOR_MAGENTA, COLOR_BLACK, true));
+    console->print(menutitlesub, COLOR(COLOR_MAGENTA, COLOR_BLACK, false));
 
     for(int i = 0; i < int(cmdlist->size()); i++)
     {
@@ -359,9 +360,8 @@ void mytest(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
 
-    console->setColor(COLOR_RED, COLOR_BLACK, false);
     console->print("this is a test of function pointer");
-    console->clearColor();
+
 }
 
 void itemMenu(std::vector<std::string> *cmd)
@@ -413,6 +413,27 @@ void showItemInfo(std::vector<std::string> *cmd)
 
     // print item info
     (*ilist)[itemnum]->printInfo();
+}
+
+void colortest(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
+
+    for(int i = 0; i < MAX_COLORS; i++)
+    {
+        for(int n = 0; n < MAX_COLORS; n++)
+        {
+            COLOR tcolor(n, i, false);
+            int colorpair = eptr->getColorPair(tcolor);
+
+            std::stringstream css;
+            css << std::setfill('0') << std::setw(2) << colorpair;
+
+            console->print(css.str(), COLOR(n, i, false), "");
+        }
+        console->print("");
+    }
 }
 
 void dbgClip(std::vector<std::string> *cmd)
