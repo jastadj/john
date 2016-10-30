@@ -267,11 +267,43 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
 
     move(crect.y, crect.x);
 
+    //reset colors
+    attron( eptr->getColorPair(COLOR(COLOR_WHITE, COLOR_BLACK, false)) | A_NORMAL);
+
     // print buffer
     for(int i = 0; i < int(tlist->size()); i++)
     {
         // get local copy of message for printing and formatting
         ConsoleElement tmsg = *(*tlist)[i];
+        int argnum = 0;
+
+        for(int n = 0; n < tmsg.m_Text.length(); n++)
+        {
+            // formatter found
+            if(tmsg.m_Text[n] == '%')
+            {
+                n++;
+
+                // bold identifier found
+                if(tmsg.m_Text[n] == 'b')
+                {
+                    n++;
+                    attron(A_BOLD);
+                }
+
+                // if color identifier found, change color
+                // using indexed argument
+                if(tmsg.m_Text[n] == 'c')
+                {
+                    attron( COLOR_PAIR(tmsg.m_Args[argnum]));
+                    argnum++;
+                }
+            }
+
+            addch(tmsg.m_Text[n]);
+        }
+
+        addch('\n');
 
         // configure message color
         /*
@@ -291,10 +323,11 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
             int clip = xpos + textlen - maxwidth;
             tmsg.m_Text.erase( tmsg.m_Text.end()-clip, tmsg.m_Text.end());
         }
-        */
+
         //attron( attr);
         printw("%s\n", tmsg.m_Text.c_str());
         //attroff(attr);
+        */
     }
 
 }
@@ -335,6 +368,19 @@ bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v
         return false;
     }
 
+    // remove any new line codes
+    pos = 0;
+    while(pos >=0 && pos <= str.length())
+    {
+        pos = str.find("\n", pos);
+
+        // newline found
+        if(pos >= 0 && pos <= str.length())
+        {
+            str.erase(pos);
+        }
+    }
+
     tlist->push_back(newelement);
 
     return true;
@@ -346,6 +392,8 @@ bool printMenuHelp(const Command *tcmd)
 {
     Console *console = Console::getInstance();
     const std::vector<Command*> *cmdlist = NULL;
+
+    Engine *eptr = Engine::getInstance();
 
     // if target command is null, print main menu help
     if(tcmd == NULL)
@@ -362,13 +410,13 @@ bool printMenuHelp(const Command *tcmd)
     }
 
     std::string menutitle;
-    if(tcmd == NULL) menutitle = std::string("main menu");
-    else menutitle = std::string(tcmd->getName() + " menu");
-    std::string menutitlesub;
+    if(tcmd == NULL) menutitle = std::string("55%cmain menu");
+    else menutitle = std::string("55%c" + tcmd->getName() + " menu");
+    std::string menutitlesub("55%c");
     for(int i = 0; i < menutitle.length(); i++) menutitlesub.append("-");
 
-    console->print(menutitle, COLOR(COLOR_MAGENTA, COLOR_BLACK, true));
-    console->print(menutitlesub, COLOR(COLOR_MAGENTA, COLOR_BLACK, false));
+    console->print(menutitle, eptr->getColorPair(COLOR(COLOR_MAGENTA, COLOR_BLACK, false)));
+    console->print(menutitlesub, eptr->getColorPair(COLOR(COLOR_MAGENTA, COLOR_BLACK, false)));
 
     for(int i = 0; i < int(cmdlist->size()); i++)
     {
