@@ -329,6 +329,10 @@ void Engine::mainLoop()
         {
             openInventory();
         }
+        else if(ch == int('d'))
+        {
+            dropItem();
+        }
     }
 }
 
@@ -818,9 +822,25 @@ Item *Engine::dropItem()
         else
         {
             int iindex = getIndexFromChar(ch);
-            if(iindex >=0 && iindex < )
+            // valid item selected
+            if(iindex >=0 && iindex < int(inventory->size()))
+            {
+                // player position
+                vector2i ppos = m_Player->getPosition();
+
+                // get and remove item from inventory
+                Item *titem = (*inventory)[iindex];
+                inventory->erase(inventory->begin() + iindex);
+
+                // add item to map
+                addItemToMap(m_Levels[m_CurrentLevel], titem, ppos.x, ppos.y);
+
+                return titem;
+            }
         }
     }
+
+    return NULL;
 }
 /////////////////////////////////////////////////////////////////
 //
