@@ -44,8 +44,9 @@ public:
     bool setTileAt(unsigned int x, unsigned int y, int ttile);
 
     // map objects
-    const std::vector<Item*> *getItems() const { return &m_Items;}
-    std::vector<const Item*> getItemsAt(int x, int y);
+    std::vector<Item*> *getItems() { return &m_Items;}
+    std::vector<Item*> getItemsAt(int x, int y);
+    Item *removeItemFromMap(Item *titem);
 
     friend class Engine;
 };

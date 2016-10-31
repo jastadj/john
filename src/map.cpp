@@ -118,9 +118,9 @@ bool Map::addItem(Item* nitem)
     return true;
 }
 
-std::vector<const Item*> Map::getItemsAt(int x, int y)
+std::vector<Item*> Map::getItemsAt(int x, int y)
 {
-    std::vector< const Item*> ilist;
+    std::vector<Item*> ilist;
 
     for(int i = 0; i < int(m_Items.size()); i++)
     {
@@ -130,4 +130,21 @@ std::vector<const Item*> Map::getItemsAt(int x, int y)
     }
 
     return ilist;
+}
+
+Item *Map::removeItemFromMap(Item *titem)
+{
+    if(titem == NULL) return NULL;
+
+    for(int i = 0; i < int(m_Items.size()); i++)
+    {
+        if(m_Items[i] == titem)
+        {
+            m_Items.erase( m_Items.begin() + i);
+
+            return titem;
+        }
+    }
+
+    return NULL;
 }

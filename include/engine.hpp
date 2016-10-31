@@ -66,6 +66,9 @@ private:
 
     // actor
     bool walkActor(Actor *tactor, int dir, bool noclip=false);
+    void printInventory(std::vector<Item*> *ilist);
+    void openInventory();
+    Item *dropItem();
 
     // level generation
     bool generateLevel(Map *tmap);
@@ -73,6 +76,7 @@ private:
     // items
     Item *newItem(int itmindex);
     bool addItemToMap(Map *tlevel, Item *titem, int x, int y);
+    Item *getItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos);
 
     // debug options
     std::vector<bool> m_DebugFlags;

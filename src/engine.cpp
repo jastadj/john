@@ -317,6 +317,18 @@ void Engine::mainLoop()
         {
             walkActor(m_Player, DIR_NE, m_DebugFlags[DBG_CLIP]);
         }
+        else if(ch == int('g'))
+        {
+            Item *titem = getItemFromMapAt(m_Player, m_Levels[m_CurrentLevel], m_Player->getPosition());
+            if(titem != NULL)
+            {
+                addMessage(&m_MessageLog, "You pick up " + titem->getArticle() + titem->getName() + ".");
+            }
+        }
+        else if(ch == int('i'))
+        {
+            openInventory();
+        }
     }
 }
 
@@ -375,7 +387,7 @@ void Engine::drawCamera(Camera *tcamera)
             m_Tiles[tileindex].m_Glyph.draw(drawpos.x, drawpos.y);
 
             //draw items
-            std::vector<const Item*> ilist = tmap->getItemsAt(n, i);
+            std::vector<Item*> ilist = tmap->getItemsAt(n, i);
             for(int k = 0; k < int(ilist.size()); k++)
             {
                 glyph tglyph = ilist[k]->getGlyph();
@@ -579,7 +591,7 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
     // if actor is player, find and print any items at their feet
     if(tactor == m_Player)
     {
-        std::vector<const Item*> m_Items = m_Levels[m_CurrentLevel]->getItemsAt( m_Player->getPosition().x, m_Player->getPosition().y);
+        std::vector<Item*> m_Items = m_Levels[m_CurrentLevel]->getItemsAt( m_Player->getPosition().x, m_Player->getPosition().y);
 
         if(!m_Items.empty())
         {
@@ -719,6 +731,97 @@ bool Engine::addItemToMap(Map *tlevel, Item *titem, int x, int y)
     return true;
 }
 
+Item *Engine::getItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
+{
+    if(tactor == NULL || tlevel == NULL) return NULL;
+
+    // get list of items at target position
+    std::vector<Item*> ilist = tlevel->getItemsAt(tpos.x, tpos.y);
+
+    // get first item in the list?
+    for(int i = 0; i < int(ilist.size()); i++)
+    {
+        Item *titem = tlevel->removeItemFromMap(ilist[i]);
+        tactor->addItemToInventory(titem);
+        return titem;
+    }
+
+    return NULL;
+}
+
+void Engine::printInventory(std::vector<Item*> *ilist)
+{
+    if(ilist == NULL) return;
+
+    if(ilist->empty())
+    {
+        printw("You are not carring anything!\n");
+    }
+    else
+    {
+        printw("Inventory\n");
+        printw("---------\n");
+
+        for(int i = 0; i < int(ilist->size()); i++)
+        {
+            printw("%c - %s", getIndexChar(i), (*ilist)[i]->getName().c_str());
+        }
+    }
+}
+
+void Engine::openInventory()
+{
+    bool doquit = false;
+    int ch = 0;
+
+    std::vector<Item*> *inventory = m_Player->getInventory();
+
+    while(!doquit)
+    {
+        clear();
+
+        printInventory(inventory);
+
+        ch = getch();
+
+        if(ch == 27) doquit = true; // escape
+        else if(ch == 10) doquit = true; // enter
+
+    }
+}
+
+Item *Engine::dropItem()
+{
+    bool doquit = false;
+    int ch = 0;
+
+    std::vector<Item*> *inventory = m_Player->getInventory();
+
+    while(!doquit)
+    {
+        clear();
+
+        printInventory(inventory);
+
+        if(inventory->empty())
+        {
+            getch();
+            return NULL;
+        }
+
+        mvprintw(24, 0, "Drop what?");
+
+        ch = getch();
+
+        if(ch == 27) doquit = true; // escape
+        else if(ch == 10) doquit = true; // enter
+        else
+        {
+            int iindex = getIndexFromChar(ch);
+            if(iindex >=0 && iindex < )
+        }
+    }
+}
 /////////////////////////////////////////////////////////////////
 //
 

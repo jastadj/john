@@ -27,4 +27,7 @@ public:
 
 float getDistance(int x1, int y1, int x2, int y2);
 
+char getIndexChar(int i);
+int getIndexFromChar(char c);
+
 #endif // CLASS_TOOLS

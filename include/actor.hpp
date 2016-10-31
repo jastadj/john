@@ -1,13 +1,20 @@
 #ifndef CLASS_ACTOR
 #define CLASS_ACTOR
 
+#include <vector>
+
 #include "worldobject.hpp"
+
+// forward dec
+class Item;
 
 class Actor: public WorldObject
 {
 private:
 
     int m_LOSRadius;
+
+    std::vector<Item*> m_Inventory;
 
 public:
     Actor();
@@ -16,5 +23,8 @@ public:
 
     void setLOSRadious(int nrad) { m_LOSRadius = nrad;}
     int getLOSRadius(){ return m_LOSRadius;}
+
+    bool addItemToInventory(Item *titem);
+    std::vector<Item*> *getInventory() { return &m_Inventory;}
 };
 #endif // CLASS_ACTOR
