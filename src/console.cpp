@@ -267,18 +267,30 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
 
     move(crect.y, crect.x);
 
-    //reset colors
-    attron( eptr->getColorPair(COLOR(COLOR_WHITE, COLOR_BLACK, false)) | A_NORMAL);
+    //list starting position
+    int i = 0;
+    if( int(tlist->size()) > crect.height)
+    {
+        i = int(tlist->size()) - crect.height;
+    }
 
     // print buffer
-    for(int i = 0; i < int(tlist->size()); i++)
+    for(i; i < int(tlist->size()); i++)
     {
+
+        //reset colors
+        attrset( eptr->getColorPair(COLOR(COLOR_WHITE, COLOR_BLACK, false)) | A_NORMAL);
+
         // get local copy of message for printing and formatting
         ConsoleElement tmsg = *(*tlist)[i];
         int argnum = 0;
 
+        // evaluate and print each character in message line
         for(int n = 0; n < tmsg.m_Text.length(); n++)
         {
+            // maximum width
+            if(getcurx(stdscr) >= crect.width) break;
+
             // formatter found
             if(tmsg.m_Text[n] == '%')
             {
@@ -299,35 +311,11 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
                     argnum++;
                 }
             }
-
-            addch(tmsg.m_Text[n]);
+            // else just print a normal character
+            else addch(tmsg.m_Text[n]);
         }
 
         addch('\n');
-
-        // configure message color
-        /*
-        chtype attr = A_NORMAL;
-        if(tmsg.m_Color.m_Bold) attr = A_BOLD;;
-        attr = attr | COLOR_PAIR( eptr->getColorPair(tmsg.m_Color) );
-
-        // get dimensions of text to see if it fits within rect
-        int xpos = getcurx(stdscr);
-        int ypos = getcury(stdscr);
-        int maxwidth = crect.width - xpos;
-        int textlen = tmsg.m_Text.length();
-
-        // if text doesn't fit within length, trim off the end
-        if(textlen + xpos >= maxwidth)
-        {
-            int clip = xpos + textlen - maxwidth;
-            tmsg.m_Text.erase( tmsg.m_Text.end()-clip, tmsg.m_Text.end());
-        }
-
-        //attron( attr);
-        printw("%s\n", tmsg.m_Text.c_str());
-        //attroff(attr);
-        */
     }
 
 }
@@ -350,14 +338,17 @@ bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v
     size_t pos = 0;
     int argcount = 0;
 
-    while(pos >=0 && pos <= str.length())
+    // find arguments
+    while(pos != std::string::npos)
     {
         pos = str.find("%", pos);
 
         // argument found
-        if(pos >= 0 && pos <= str.length())
+        if(pos != std::string::npos)
         {
             newelement->m_Args.push_back(va_arg(v, int));
+            argcount++;
+            pos++;
         }
     }
 
@@ -365,19 +356,23 @@ bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v
     if(argcount != int(newelement->m_Args.size()) )
     {
         delete newelement;
+        printw("Invalid argument count! args=%d m_Args size=%d\n", argcount, newelement->m_Args.size());
+        refresh();
+        exit(2);
         return false;
     }
 
     // remove any new line codes
     pos = 0;
-    while(pos >=0 && pos <= str.length())
+    while(pos != std::string::npos)
     {
         pos = str.find("\n", pos);
 
         // newline found
-        if(pos >= 0 && pos <= str.length())
+        if(pos != std::string::npos)
         {
             str.erase(pos);
+            pos++;
         }
     }
 
@@ -410,10 +405,10 @@ bool printMenuHelp(const Command *tcmd)
     }
 
     std::string menutitle;
-    if(tcmd == NULL) menutitle = std::string("55%cmain menu");
-    else menutitle = std::string("55%c" + tcmd->getName() + " menu");
-    std::string menutitlesub("55%c");
-    for(int i = 0; i < menutitle.length(); i++) menutitlesub.append("-");
+    if(tcmd == NULL) menutitle = std::string("%cmain menu");
+    else menutitle = std::string("%c" + tcmd->getName() + " menu");
+    std::string menutitlesub("%c");
+    for(int i = 0; i < menutitle.length()-2; i++) menutitlesub.append("-");
 
     console->print(menutitle, eptr->getColorPair(COLOR(COLOR_MAGENTA, COLOR_BLACK, false)));
     console->print(menutitlesub, eptr->getColorPair(COLOR(COLOR_MAGENTA, COLOR_BLACK, false)));
@@ -507,15 +502,16 @@ void colortest(std::vector<std::string> *cmd)
     {
         for(int n = 0; n < MAX_COLORS; n++)
         {
+            std::stringstream css;
+
             COLOR tcolor(n, i, false);
             int colorpair = eptr->getColorPair(tcolor);
 
-            std::stringstream css;
-            css << std::setfill('0') << std::setw(2) << colorpair;
 
-            console->print(css.str(), COLOR(n, i, false), "");
+            css << "%c" << std::setfill('0') << std::setw(2) << colorpair;
+
+            console->print(css.str(), eptr->getColorPair(COLOR(n, i, false)));
         }
-        console->print("");
     }
 }
 

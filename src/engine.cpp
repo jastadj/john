@@ -246,7 +246,7 @@ void Engine::mainLoop()
     bool quit = false;
     int ch = 0;
 
-    recti messagelogrect(0, 20, 80, 4);
+    recti messagelogrect(0, 19, 80, 6);
 
 
     // set curses environment options for main game
@@ -258,7 +258,7 @@ void Engine::mainLoop()
     {
         // clear screen
         clear();
-        attron( COLOR_PAIR( m_ColorTable[COLOR_BLACK][COLOR_WHITE]) | A_NORMAL);
+        attrset(A_NORMAL);
 
         // update
         vector2i playerpos = m_Player->getPosition();
