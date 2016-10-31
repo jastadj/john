@@ -149,7 +149,7 @@ bool Engine::initItems()
     m_Console->print("Loading items...");
 
     Item *newitem = new Item;
-    newitem->setName("rock");
+    newitem->setName("rock", "a ");
     newitem->setIcon('*');
     newitem->setColors(COLOR_WHITE, COLOR_BLACK, true);
     newitem->setValue(0.2);
@@ -203,7 +203,7 @@ void Engine::newGame()
     // init player
     vector2i playerpos(0,0);
     m_Player = new Actor();
-    m_Player->setName("player");
+    m_Player->setName("player", "");
     m_Player->setIcon('@');
     m_Player->setPosition(playerpos);
 
@@ -563,8 +563,6 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
     // out of bounds
     if(npos.x < 0 || npos.x >= mapdims.x || npos.y < 0 || npos.y >= mapdims.y) return false;
 
-
-
     if(!noclip)
     {
         // tile is unwalkable
@@ -577,6 +575,30 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 
     // tile is valid, set actors position
     tactor->setPosition(npos);
+
+    // if actor is player, find and print any items at their feet
+    if(tactor == m_Player)
+    {
+        std::vector<const Item*> m_Items = m_Levels[m_CurrentLevel]->getItemsAt( m_Player->getPosition().x, m_Player->getPosition().y);
+
+        if(!m_Items.empty())
+        {
+            std::stringstream ifind;
+            ifind << "You see ";
+
+            for(int n = 0; n < int(m_Items.size()); n++)
+            {
+                // if it's the last item in the list
+                if(n == int(m_Items.size())-1)
+                {
+                    ifind << m_Items[n]->getArticle() << m_Items[n]->getName() << ".";
+                }
+                else ifind << m_Items[n]->getArticle() << m_Items[n]->getName() << ",";
+            }
+
+            addMessage(&m_MessageLog, ifind.str());
+        }
+    }
 
     return true;
 }

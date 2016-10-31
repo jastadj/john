@@ -13,6 +13,12 @@ WorldObject::~WorldObject()
 
 }
 
+void WorldObject::setName(std::string nname, std::string narticle)
+{
+    m_Name = nname;
+    m_Article = narticle;
+}
+
 void WorldObject::setPosition(vector2i npos)
 {
     m_Position = npos;
@@ -34,6 +40,7 @@ void WorldObject::printInfo()
     Console *console = Console::getInstance();
     console->print("");
     console->print("Name:" + m_Name);
+    console->print("Article:" + m_Article);
 
     std::stringstream ss;
     ss << "Position:" << m_Position.x << "," << m_Position.y;

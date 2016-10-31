@@ -13,6 +13,7 @@ class WorldObject
 {
 protected:
     std::string m_Name;
+    std::string m_Article;
     vector2i m_Position;
 
     glyph m_Glyph;
@@ -22,14 +23,15 @@ public:
     virtual ~WorldObject();
     virtual OBJTYPE getType()=0;
 
-    std::string getName() { return m_Name;}
+    std::string getName() const { return m_Name;}
+    std::string getArticle() const { return m_Article;}
     chtype getIcon() { return m_Glyph.m_Character;}
     vector2i getPosition() { return m_Position;}
     int getColorForeground() { return m_Glyph.m_Color.m_Foreground;}
     int getColorBackground() { return m_Glyph.m_Color.m_Background;}
     glyph getGlyph() const { return m_Glyph;}
 
-    void setName(std::string nname) {m_Name = nname;}
+    void setName(std::string nname, std::string narticle);
     void setIcon(chtype nicon) {m_Glyph.m_Character = nicon;}
     void setPosition(int nx, int ny);
     void setPosition(vector2i npos);
