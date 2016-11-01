@@ -279,7 +279,7 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
     {
 
         //reset colors
-        attrset( eptr->getColorPair(COLOR(COLOR_WHITE, COLOR_BLACK, false)) | A_NORMAL);
+        attrset( COLOR_PAIR(eptr->getColorPair(COLOR(COLOR_WHITE, COLOR_BLACK, false))) | A_NORMAL);
 
         // get local copy of message for printing and formatting
         ConsoleElement tmsg = *(*tlist)[i];
