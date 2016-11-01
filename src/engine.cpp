@@ -27,10 +27,6 @@ Engine::~Engine()
     curs_set(1);
     clear();
     endwin();
-    
-#ifdef NCURSES
-	system("stty sane");
-#endif
 
 }
 
