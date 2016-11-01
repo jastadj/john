@@ -1,7 +1,12 @@
 #ifndef CLASS_CONSOLE
 #define CLASS_CONSOLE
 
+#ifdef NCURSES
+#include <ncurses.h>
+#else
 #include "curses.h"
+#endif
+
 #include <string>
 #include <vector>
 #include "color.hpp"

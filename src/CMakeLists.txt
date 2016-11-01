@@ -7,7 +7,11 @@ include_directories(/usr/include)
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 
-#add_definitions(-lcurses)
+option(USE_NCURSES "USE_NCURSES" off)
+
+if(USE_NCURSES)
+	add_definitions(-DNCURSES)
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 

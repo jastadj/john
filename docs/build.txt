@@ -1,0 +1,12 @@
+Build:
+1. Install CMake
+2. Create build directory in top level
+3. Change directory to build directory
+4. Build for either Windows or Linux:
+	a)Windows:
+		cmake ..
+		make
+	
+	b)Linux:
+		cmake .. -DUSE_NCURSES
+		make

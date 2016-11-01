@@ -4,7 +4,12 @@
 #include <cstdlib>
 #include <vector>
 #include <time.h>
+
+#ifdef NCURSES
+#include <ncurses.h>
+#else
 #include "curses.h"
+#endif
 
 #include "color.hpp"
 #include "map.hpp"

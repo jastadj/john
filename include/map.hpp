@@ -4,7 +4,12 @@
 #include <string>
 #include <vector>
 
+#ifdef NCURSES
+#include <ncurses.h>
+#else
 #include "curses.h"
+#endif
+
 #include "tools.hpp"
 #include "glyph.hpp"
 

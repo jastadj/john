@@ -1,7 +1,12 @@
 #ifndef CLASS_WORLDOBJECT
 #define CLASS_WORLDOBJECT
 
+#ifdef NCURSES
+#include <ncurses.h>
+#else
 #include "curses.h"
+#endif
+
 #include <string>
 
 #include "tools.hpp"

@@ -1,7 +1,12 @@
 #ifndef CLASS_GLYPH
 #define CLASS_GLYPH
 
+#ifdef NCURSES
+#include <ncurses.h>
+#else
 #include "curses.h"
+#endif
+
 #include "color.hpp"
 
 class glyph
