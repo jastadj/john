@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add directory="include" />
+			<Add directory="include/curses" />
 		</Compiler>
 		<Linker>
 			<Add library="lib/pdcurses.a" />
