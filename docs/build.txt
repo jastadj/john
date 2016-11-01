@@ -8,5 +8,5 @@ Build:
 		make
 	
 	b)Linux:
-		cmake .. -DUSE_NCURSES
+		cmake .. -DUSE_NCURSES=on
 		make

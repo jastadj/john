@@ -3,6 +3,10 @@ project (john)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(/usr/include)
+if(USE_NCURSES)
+include_directories(${PROJECT_SOURCE_DIR}/include/curses)
+endif()
+
 
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
