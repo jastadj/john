@@ -211,7 +211,7 @@ void Engine::newGame()
 
     // init maps
     Map *newmap = new Map();
-    newmap->resize(25,25);
+    newmap->resize(100,100);
     //generateLevel(newmap);
     newmap->fill(2);
     newmap->setTileAt(5,5,1);
@@ -219,7 +219,7 @@ void Engine::newGame()
     m_Levels.push_back(newmap);
 
     // init camera
-    m_Camera.setDimensions(80,25);
+    m_Camera.setDimensions(40,20);
     m_Camera.setScreenPosition(0,0);
     m_Camera.setWorldPosition(0,0);
     m_Camera.setCenter(playerpos);
