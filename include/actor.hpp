@@ -22,9 +22,11 @@ public:
     OBJTYPE getType() { return OBJ_ACTOR;}
 
     void setLOSRadious(int nrad) { m_LOSRadius = nrad;}
-    int getLOSRadius(){ return m_LOSRadius;}
+    int getLOSRadius() const { return m_LOSRadius;}
 
     bool addItemToInventory(Item *titem);
     std::vector<Item*> *getInventory() { return &m_Inventory;}
+
+    void printInfo() const;
 };
 #endif // CLASS_ACTOR

@@ -35,7 +35,7 @@ void WorldObject::setColors(int foreground, int background, bool bold)
     m_Glyph.m_Color = tcolor;
 }
 
-void WorldObject::printInfo()
+void WorldObject::printInfo() const
 {
     Console *console = Console::getInstance();
     console->print("");

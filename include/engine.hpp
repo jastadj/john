@@ -57,6 +57,7 @@ private:
     void clearGame();
     time_t m_Seed;
     Actor *m_Player;
+    unsigned int m_PlayerMoveCount;
     int m_CurrentLevel;
     std::vector<Map*> m_Levels;
     std::vector<ConsoleElement*> m_MessageLog;
@@ -95,6 +96,8 @@ public:
     //std::vector< std::vector<int> > *getColorTable() { return &m_ColorTable;}
     int getColorPair(COLOR tcolor);
     const std::vector<Item*> *getItemList() { return &m_Items;}
+    const Actor *getPlayer();
+    unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
 
 
 

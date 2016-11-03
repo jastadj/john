@@ -18,7 +18,7 @@ public:
     chtype m_Character;
     COLOR m_Color;
 
-    void printInfo();
+    void printInfo() const;
 
     void draw(int x, int y);
 };

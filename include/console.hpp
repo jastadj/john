@@ -87,6 +87,7 @@ void showItemInfo(std::vector<std::string> *cmd);
 void printItemList(std::vector<std::string> *cmd);
 void mytest(std::vector<std::string> *cmd);
 void colortest(std::vector<std::string> *cmd);
+void printPlayer(std::vector<std::string> *cmd);
 void dbgClip(std::vector<std::string> *cmd);
 void dbgLOS(std::vector<std::string> *cmd);
 void dbgLighting(std::vector<std::string> *cmd);

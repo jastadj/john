@@ -8,6 +8,7 @@
 
 #include "engine.hpp"
 #include "tools.hpp"
+#include "actor.hpp"
 
 Console *Console::m_Instance = NULL;
 
@@ -81,6 +82,10 @@ bool Console::initCommands()
         newcmd->addCommand(new Command(Command::C_CMD, "list", "list items", &printItemList));
         newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show item info (see list)", &showItemInfo) );
     m_CommandList.push_back(newcmd);
+
+    newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
+		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print player info", &printPlayer) );
+	m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_CMD, "clip", "toggle clipping through walls", &dbgClip);
     m_CommandList.push_back(newcmd);
@@ -275,7 +280,7 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
     }
 
     // print buffer
-    for(i; i < int(tlist->size()); i++)
+    for(0; i < int(tlist->size()); i++)
     {
 
         //reset colors
@@ -462,6 +467,19 @@ void printItemList(std::vector<std::string> *cmd)
         msg << i << " - " << (*ilist)[i]->getName();
         console->print(msg.str());
     }
+}
+
+void printPlayer(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
+
+    const Actor *player = eptr->getPlayer();
+    player->printInfo();
+
+    std::stringstream ss;
+    ss << "Player Move Count:" << eptr->getPlayerMoveCount();
+    console->print(ss.str());
 }
 
 void showItemInfo(std::vector<std::string> *cmd)

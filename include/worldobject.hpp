@@ -42,7 +42,7 @@ public:
     void setPosition(vector2i npos);
     void setColors(int foreground, int background, bool bold);
 
-    virtual void printInfo();
+    virtual void printInfo() const;
 
 };
 

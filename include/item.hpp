@@ -21,5 +21,7 @@ public:
 
     float getValue() { return m_Value;}
     float getWeight() { return m_Weight;}
+
+    void printInfo();
 };
 #endif // CLASS_ITEM

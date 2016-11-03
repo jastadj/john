@@ -206,6 +206,7 @@ void Engine::newGame()
     m_Player->setName("player", "");
     m_Player->setIcon('@');
     m_Player->setPosition(playerpos);
+    m_PlayerMoveCount = 0;
 
     m_CurrentLevel = 0;
 
@@ -614,6 +615,8 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 
             addMessage(&m_MessageLog, ifind.str());
         }
+
+        m_PlayerMoveCount++;
     }
 
     return true;
@@ -751,6 +754,11 @@ Item *Engine::getItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
     }
 
     return NULL;
+}
+
+const Actor *Engine::getPlayer()
+{
+	return m_Player;
 }
 
 void Engine::printInventory(std::vector<Item*> *ilist)

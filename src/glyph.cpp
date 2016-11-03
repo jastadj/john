@@ -21,7 +21,7 @@ void glyph::draw(int x, int y)
     mvaddch(y, x, m_Character);
 }
 
-void glyph::printInfo()
+void glyph::printInfo() const
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
