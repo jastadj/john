@@ -35,12 +35,16 @@ public:
     int getColorForeground() { return m_Glyph.m_Color.m_Foreground;}
     int getColorBackground() { return m_Glyph.m_Color.m_Background;}
     glyph getGlyph() const { return m_Glyph;}
+    bool isWalkable() { return m_Glyph.m_Walkable;}
+    bool passesLight() { return m_Glyph.m_PassesLight;}
 
     void setName(std::string nname, std::string narticle);
     void setIcon(chtype nicon) {m_Glyph.m_Character = nicon;}
     void setPosition(int nx, int ny);
     void setPosition(vector2i npos);
     void setColors(int foreground, int background, bool bold);
+    void setWalkable(bool nwalkable) { m_Glyph.m_Walkable = true;}
+    void setPassesLight(bool nplight) { m_Glyph.m_PassesLight;}
 
     virtual void printInfo() const;
 

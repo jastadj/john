@@ -7,6 +7,8 @@ glyph::glyph()
 {
     m_Character = '?';
     m_Color = COLOR();
+    m_Walkable = true;
+    m_PassesLight = true;
 }
 
 glyph::~glyph()
@@ -30,5 +32,10 @@ void glyph::printInfo() const
     ss << "Glyph Char:" << char(m_Character);
     console->print(ss.str());
     ss.str(std::string());
+    ss << "Walkable:" << m_Walkable;
+    console->print(ss.str());
+    ss.str(std::string());
+    ss << "Passes Light:" << m_PassesLight;
+    console->print(ss.str());
 
 }

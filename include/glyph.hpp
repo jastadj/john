@@ -17,6 +17,8 @@ public:
 
     chtype m_Character;
     COLOR m_Color;
+    bool m_Walkable;
+    bool m_PassesLight;
 
     void printInfo() const;
 

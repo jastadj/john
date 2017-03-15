@@ -80,9 +80,9 @@ private:
     bool generateLevel(Map *tmap);
 
     // items
-    Item *newItem(int itmindex);
     bool addItemToMap(Map *tlevel, Item *titem, int x, int y);
     Item *getItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos);
+    Item *newItem(int itmindex);
 
     // debug options
     std::vector<bool> m_DebugFlags;
@@ -100,13 +100,14 @@ public:
     unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
 
 
-
-
+    const Tile *getTile(int index);
 
     // debug
     bool toggleDebug(E_DEBUG dtype);
     bool setDebug(E_DEBUG dtype, bool dstate);
     bool isDebug(E_DEBUG dtype);
+
+    // give console access
 
 };
 #endif // CLASS_ENGINE

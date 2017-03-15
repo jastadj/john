@@ -14,7 +14,7 @@ Engine::Engine()
     m_DebugFlags.resize(DBG_TOTAL);
     m_DebugFlags[DBG_CLIP] = false;
     m_DebugFlags[DBG_LOS] = false;
-    m_DebugFlags[DBG_LIGHT] = false;
+    m_DebugFlags[DBG_LIGHT] = true; // = false;
 
 }
 
@@ -115,21 +115,22 @@ bool Engine::initTiles()
     // tile 0 = not used, index 0 should be no tile data
     Tile newtile;
     newtile.m_Glyph.m_Character = '!';
-    newtile.m_IsWalkable = false;
+    newtile.m_Glyph.m_Walkable = false;
     newtile.m_Name = "NO TILE!\n";
     m_Tiles.push_back(newtile);
 
     // tile 1 = wall
     newtile = Tile();
     newtile.m_Glyph.m_Character = chtype(219);
-    newtile.m_IsWalkable = false;
+    newtile.m_Glyph.m_Walkable = false;
+    newtile.m_Glyph.m_PassesLight = false;
     newtile.m_Name = "wall";
     m_Tiles.push_back(newtile);
 
     // tile 2 = floor
     newtile = Tile();
     newtile.m_Glyph.m_Character = '.';
-    newtile.m_IsWalkable = true;
+    newtile.m_Glyph.m_Walkable = true;
     newtile.m_Name = "floor";
     m_Tiles.push_back(newtile);
 
@@ -452,7 +453,8 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
             if(i == x2 || i == x1) continue;
 
             // los is blocked
-            if( !m_Tiles[tmap->getMapTileIndexAt(i, y1)].m_IsWalkable) return false;
+            //if( !m_Tiles[tmap->getMapTileIndexAt(i, y1)].m_Glyph.m_PassesLight) return false;
+            if( !tmap->passesLightAt(i, y1)) return false;
         }
     }
     else if(run == 0)
@@ -470,7 +472,8 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
             if(i == y2 || i == y1) continue;
 
             // los is blocked
-            if( !m_Tiles[tmap->getMapTileIndexAt(x1, i)].m_IsWalkable) return false;
+            //if( !m_Tiles[tmap->getMapTileIndexAt(x1, i)].m_Glyph.m_PassesLight) return false;
+            if( !tmap->passesLightAt(x1, i) ) return false;
         }
     }
     // not ortho
@@ -493,8 +496,9 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
             if(fract >= roundoff) ty = round(ty);
 
             // los is blocked
-            int tileindex = tmap->getMapTileIndexAt(i, int(ty));
-            if( !m_Tiles[tileindex].m_IsWalkable) return false;
+            //int tileindex = tmap->getMapTileIndexAt(i, int(ty));
+            //if( !m_Tiles[tileindex].m_Glyph.m_PassesLight) return false;
+            if( !tmap->passesLightAt(i, int(ty)) ) return false;;
         }
 
         //x sweep
@@ -518,8 +522,9 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
             if(fract >= roundoff) tx = round(tx);
 
             // los is blocked
-            int tileindex = tmap->getMapTileIndexAt( int(tx), i );
-            if( !m_Tiles[tileindex].m_IsWalkable) return false;
+            //int tileindex = tmap->getMapTileIndexAt( int(tx), i );
+            //if( !m_Tiles[tileindex].m_Glyph.m_PassesLight) return false;
+            if( !tmap->passesLightAt( int(tx), i)) return false;
         }
 
     }
@@ -586,7 +591,7 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
         int ttile = tmap->getMapTileIndexAt(npos);
 
         if(ttile < 0 || ttile >= int(m_Tiles.size()) ) return false;
-        if(!m_Tiles[ttile].m_IsWalkable) return false;
+        if(!m_Tiles[ttile].m_Glyph.m_Walkable) return false;
     }
 
 
@@ -700,6 +705,12 @@ bool Engine::generateLevel(Map *tmap)
     return true;
 }
 
+const Tile *Engine::getTile(int index)
+{
+    if(index < 0 || index >= int(m_Tiles.size()) ) return NULL;
+
+    return &m_Tiles[index];
+}
 
 Item *Engine::newItem(int itmindex)
 {

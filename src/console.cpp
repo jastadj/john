@@ -81,6 +81,7 @@ bool Console::initCommands()
     newcmd = new Command(Command::C_SUBMENU, "item", "Item menu", NULL);
         newcmd->addCommand(new Command(Command::C_CMD, "list", "list items", &printItemList));
         newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show item info (see list)", &showItemInfo) );
+        newcmd->addCommand(new Command(Command::C_CMD, "give", "give item # to player", &giveItemToPlayer) );
     m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
@@ -280,7 +281,7 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
     }
 
     // print buffer
-    for(0; i < int(tlist->size()); i++)
+    for(i = 0; i < int(tlist->size()); i++)
     {
 
         //reset colors
@@ -509,6 +510,37 @@ void showItemInfo(std::vector<std::string> *cmd)
 
     // print item info
     (*ilist)[itemnum]->printInfo();
+}
+
+void giveItemToPlayer(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
+
+    int cmdlen = int(cmd->size());
+    int itemnum = -1;
+
+    const std::vector<Item*> *ilist = eptr->getItemList();
+
+    // invalid parameters
+    if(cmdlen != 3)
+    {
+        console->print("Invalid parameters!");
+        return;
+    }
+
+    // item number out of range
+    itemnum = atoi( (*cmd)[2].c_str());
+    if(itemnum < 0 || itemnum >= int(ilist->size()) )
+    {
+        console->print("Item #" + (*cmd)[2] + " out of range!");
+        return;
+    }
+
+    // give item to player
+    console->print("not implemented...");
+    //Item *newitem = eptr->newItem(itemnum);
+    //eptr->getPlayer()->addItemToInventory(newitem);
 }
 
 void colortest(std::vector<std::string> *cmd)

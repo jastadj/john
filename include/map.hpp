@@ -15,6 +15,7 @@
 
 // forward declaration
 class Item;
+class Engine;
 
 class Tile
 {
@@ -24,12 +25,14 @@ public:
 
     std::string m_Name;
     glyph m_Glyph;
-    bool m_IsWalkable;
 };
 
 class Map
 {
 private:
+
+    Engine *m_Engine;
+
     std::vector< std::vector<int> > m_Array;
     std::vector< Item*> m_Items;
 
@@ -52,6 +55,8 @@ public:
     std::vector<Item*> *getItems() { return &m_Items;}
     std::vector<Item*> getItemsAt(int x, int y);
     Item *removeItemFromMap(Item *titem);
+
+    bool passesLightAt(int x, int y);
 
     friend class Engine;
 };
