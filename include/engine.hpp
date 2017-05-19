@@ -70,14 +70,18 @@ private:
     void drawCamera(Camera *tcamera);
     bool inLOS(int x1, int y1, int x2, int y2);
 
+
     // actor
     bool walkActor(Actor *tactor, int dir, bool noclip=false);
     void printInventory(std::vector<Item*> *ilist);
     void openInventory();
     Item *dropItem();
 
-    // level generation
+    // level
     bool generateLevel(Map *tmap);
+    bool lightPassesThroughAt(int x, int y, Map *tmap = NULL);
+    bool isWalkableAt(int x, int y, Map *tmap = NULL);
+    bool openDoorAt(int x, int y, Map *tmap = NULL);
 
     // items
     bool addItemToMap(Map *tlevel, Item *titem, int x, int y);
@@ -95,12 +99,10 @@ public:
     // get stuff from main engine
     //std::vector< std::vector<int> > *getColorTable() { return &m_ColorTable;}
     int getColorPair(COLOR tcolor);
+    const Map *getCurrentMap() { return m_Levels[m_CurrentLevel];}
     const std::vector<Item*> *getItemList() { return &m_Items;}
     const Actor *getPlayer();
     unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
-
-
-    const Tile *getTile(int index);
 
     // debug
     bool toggleDebug(E_DEBUG dtype);

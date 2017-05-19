@@ -1,7 +1,8 @@
 #include "map.hpp"
 #include <cstdlib>
 #include "item.hpp"
-#include "engine.hpp"
+#include "console.hpp"
+#include <sstream>
 
 Tile::Tile()
 {
@@ -18,8 +19,7 @@ Tile::~Tile()
 //
 Map::Map()
 {
-    m_Engine = NULL;
-    m_Engine = Engine::getInstance();
+
 }
 
 Map::~Map()
@@ -27,7 +27,7 @@ Map::~Map()
 
 }
 
-vector2i Map::getDimensions()
+vector2i Map::getDimensions() const
 {
     vector2i dims;
 
@@ -43,7 +43,6 @@ vector2i Map::getDimensions()
         {
             if( int(m_Array[i].size()) != dims.x)
             {
-                clear();
                 printw("ERROR, map dimension widths not consistent when y = %d", i);
                 getch();
                 exit(1);
@@ -112,31 +111,7 @@ bool Map::setTileAt(unsigned int x, unsigned int y, int ttile)
     return true;
 }
 
-bool Map::passesLightAt(int x, int y)
-{
-    vector2i dims = getDimensions();
-    const Tile *ttile = NULL;
-    std::vector<Item*> titems;
 
-    // check x,y validity
-    if(int(x) >= dims.x || int(y) >= dims.y) return false;
-
-    // get tile at x,y and check if passes light
-    ttile = m_Engine->getTile(getMapTileIndexAt(x,y));
-    if(!ttile) return false;
-    if( !ttile->m_Glyph.m_PassesLight ) return false;
-
-    // get items at x,y and check if passes light
-    titems = getItemsAt(x, y);
-    for(int i = 0; i < int(titems.size()); i++)
-    {
-        if( !titems[i]->getGlyph().m_PassesLight) return false;
-    }
-
-
-
-    return true;
-}
 
 bool Map::addItem(Item* nitem)
 {
@@ -174,4 +149,40 @@ Item *Map::removeItemFromMap(Item *titem)
     }
 
     return NULL;
+}
+
+bool Map::openDoorAt(int x, int y)
+{
+    for(int i = 0; i < int(m_Items.size()); i++)
+    {
+        if(m_Items[i]->getPosition().x == x && m_Items[i]->getPosition().y == y)
+        {
+            if(m_Items[i]->getDoor())
+            {
+                m_Items[i]->openDoor();
+
+                return m_Items[i]->getDoor()->isOpen();
+            }
+        }
+    }
+
+    return false;
+}
+
+void Map::printInfo() const
+{
+    Console *console = NULL;
+    console = Console::getInstance();
+
+    std::stringstream sstr;
+
+    console->print("Map Info");
+    console->print("--------");
+    sstr << "Dimensions : " << getDimensions().x << "," << getDimensions().y;
+    console->print(sstr.str());
+
+    sstr.str(std::string());
+    sstr << "Item Count : " << m_Items.size();
+    console->print(sstr.str());
+
 }

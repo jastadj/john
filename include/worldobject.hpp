@@ -25,6 +25,7 @@ protected:
 
 public:
     WorldObject();
+    WorldObject(const WorldObject &tobj);
     virtual ~WorldObject();
     virtual OBJTYPE getType()=0;
 
@@ -43,8 +44,8 @@ public:
     void setPosition(int nx, int ny);
     void setPosition(vector2i npos);
     void setColors(int foreground, int background, bool bold);
-    void setWalkable(bool nwalkable) { m_Glyph.m_Walkable = true;}
-    void setPassesLight(bool nplight) { m_Glyph.m_PassesLight;}
+    void setWalkable(bool nwalkable) { m_Glyph.m_Walkable = nwalkable;}
+    void setPassesLight(bool nplight) { m_Glyph.m_PassesLight = nplight;}
 
     virtual void printInfo() const;
 

@@ -74,13 +74,18 @@
 1476891360 source:c:\users\jjastad\documents\codeblocks\projects\john\src\glyph.cpp
 	"glyph.hpp"
 
-1477025858 source:c:\codeblocks\projects\john\src\actor.cpp
+1493564705 source:c:\codeblocks\projects\john\src\actor.cpp
 	"actor.hpp"
+	"item.hpp"
+	"console.hpp"
+	<sstream>
 
-1477025857 c:\codeblocks\projects\john\include\actor.hpp
+1493564705 c:\codeblocks\projects\john\include\actor.hpp
+	<vector>
 	"worldobject.hpp"
 
-1477356650 c:\codeblocks\projects\john\include\worldobject.hpp
+1493564705 c:\codeblocks\projects\john\include\worldobject.hpp
+	<ncurses.h>
 	"curses.h"
 	<string>
 	"tools.hpp"
@@ -92,75 +97,88 @@
 	<stdio.h>
 	<wchar.h>
 
-1477025857 c:\codeblocks\projects\john\include\tools.hpp
+1493564705 c:\codeblocks\projects\john\include\tools.hpp
 
-1477028065 c:\codeblocks\projects\john\include\glyph.hpp
+1493564705 c:\codeblocks\projects\john\include\glyph.hpp
+	<ncurses.h>
 	"curses.h"
+	"color.hpp"
 
-1477025858 source:c:\codeblocks\projects\john\src\camera.cpp
+1493564705 source:c:\codeblocks\projects\john\src\camera.cpp
 	"camera.hpp"
 
-1477025857 c:\codeblocks\projects\john\include\camera.hpp
+1493564705 c:\codeblocks\projects\john\include\camera.hpp
 	"tools.hpp"
 
-1477356268 source:c:\codeblocks\projects\john\src\engine.cpp
+1493564705 source:c:\codeblocks\projects\john\src\engine.cpp
 	"engine.hpp"
 	"actor.hpp"
 	<cmath>
 	<sstream>
 
-1477355833 c:\codeblocks\projects\john\include\engine.hpp
+1493564705 c:\codeblocks\projects\john\include\engine.hpp
 	<cstdlib>
 	<vector>
 	<time.h>
+	<ncurses.h>
 	"curses.h"
+	"color.hpp"
 	"map.hpp"
 	"camera.hpp"
 	"console.hpp"
 	"item.hpp"
 
-1477356268 c:\codeblocks\projects\john\include\map.hpp
+1493564705 c:\codeblocks\projects\john\include\map.hpp
 	<string>
 	<vector>
+	<ncurses.h>
 	"curses.h"
 	"tools.hpp"
 	"glyph.hpp"
 
-1477035433 source:c:\codeblocks\projects\john\src\glyph.cpp
+1493564705 source:c:\codeblocks\projects\john\src\glyph.cpp
 	"glyph.hpp"
 	"console.hpp"
 	"engine.hpp"
 	<sstream>
 
-1477025858 source:c:\codeblocks\projects\john\src\main.cpp
+1493564705 source:c:\codeblocks\projects\john\src\main.cpp
 	<cstdlib>
 	"engine.hpp"
 
-1477356415 source:c:\codeblocks\projects\john\src\map.cpp
+1493564705 source:c:\codeblocks\projects\john\src\map.cpp
 	"map.hpp"
 	<cstdlib>
 	"item.hpp"
+	"console.hpp"
+	<sstream>
 
-1477025858 source:c:\codeblocks\projects\john\src\tools.cpp
+1493564705 source:c:\codeblocks\projects\john\src\tools.cpp
 	"tools.hpp"
 	<cmath>
 
-1477035506 source:c:\codeblocks\projects\john\src\worldobject.cpp
+1493564705 source:c:\codeblocks\projects\john\src\worldobject.cpp
 	"worldobject.hpp"
 	"console.hpp"
 	<sstream>
 
-1477035754 source:c:\codeblocks\projects\john\src\console.cpp
+1493564705 source:c:\codeblocks\projects\john\src\console.cpp
 	"console.hpp"
 	<cstdlib>
 	<sstream>
 	<iostream>
+	<iomanip>
+	<stdarg.h>
 	"engine.hpp"
+	"tools.hpp"
+	"actor.hpp"
 
-1477032925 c:\codeblocks\projects\john\include\console.hpp
+1493564705 c:\codeblocks\projects\john\include\console.hpp
+	<ncurses.h>
 	"curses.h"
 	<string>
 	<vector>
+	"color.hpp"
 
 1477003408 source:c:\users\jjastad\documents\codeblocks\projects\john\src\console.cpp
 	"console.hpp"
@@ -180,9 +198,20 @@
 1476912864 c:\users\jjastad\documents\codeblocks\projects\john\include\item.hpp
 	"worldobject.hpp"
 
-1477355473 c:\codeblocks\projects\john\include\item.hpp
+1493564705 c:\codeblocks\projects\john\include\item.hpp
 	"worldobject.hpp"
+	<vector>
 
-1477025858 source:c:\codeblocks\projects\john\src\item.cpp
+1493564705 source:c:\codeblocks\projects\john\src\item.cpp
 	"item.hpp"
+	"console.hpp"
+	<sstream>
+
+1478006418 c:\codeblocks\projects\john\include\curses\curses.h
+	<stdarg.h>
+	<stddef.h>
+	<stdio.h>
+	<wchar.h>
+
+1493564705 c:\codeblocks\projects\john\include\color.hpp
 

@@ -84,6 +84,11 @@ bool Console::initCommands()
         newcmd->addCommand(new Command(Command::C_CMD, "give", "give item # to player", &giveItemToPlayer) );
     m_CommandList.push_back(newcmd);
 
+    newcmd = new Command(Command::C_SUBMENU, "map", "Map menu", NULL);
+		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print map info", &printMap) );
+		newcmd->addCommand(new Command(Command::C_CMD, "items", "Print map items", &printMapItems) );
+	m_CommandList.push_back(newcmd);
+
     newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
 		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print player info", &printPlayer) );
 	m_CommandList.push_back(newcmd);
@@ -541,6 +546,18 @@ void giveItemToPlayer(std::vector<std::string> *cmd)
     console->print("not implemented...");
     //Item *newitem = eptr->newItem(itemnum);
     //eptr->getPlayer()->addItemToInventory(newitem);
+}
+
+void printMap(std::vector<std::string> *cmd)
+{
+    Engine *eptr = Engine::getInstance();
+    eptr->getCurrentMap()->printInfo();
+}
+
+void printMapItems(std::vector<std::string> *cmd)
+{
+    Engine *eptr = Engine::getInstance();
+
 }
 
 void colortest(std::vector<std::string> *cmd)

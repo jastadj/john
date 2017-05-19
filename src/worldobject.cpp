@@ -8,6 +8,11 @@ WorldObject::WorldObject()
 
 }
 
+WorldObject::WorldObject(const WorldObject &tobj)
+{
+    *this = tobj;
+}
+
 WorldObject::~WorldObject()
 {
 

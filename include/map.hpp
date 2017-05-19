@@ -15,7 +15,6 @@
 
 // forward declaration
 class Item;
-class Engine;
 
 class Tile
 {
@@ -31,8 +30,6 @@ class Map
 {
 private:
 
-    Engine *m_Engine;
-
     std::vector< std::vector<int> > m_Array;
     std::vector< Item*> m_Items;
 
@@ -43,7 +40,7 @@ public:
     ~Map();
 
     // map tiles
-    vector2i getDimensions();
+    vector2i getDimensions() const;
     void clear();
     void resize(unsigned int x, unsigned int y);
     void fill(unsigned int tileindex);
@@ -52,11 +49,13 @@ public:
     bool setTileAt(unsigned int x, unsigned int y, int ttile);
 
     // map objects
-    std::vector<Item*> *getItems() { return &m_Items;}
+    const std::vector<Item*> *getItems() { return &m_Items;}
     std::vector<Item*> getItemsAt(int x, int y);
     Item *removeItemFromMap(Item *titem);
 
-    bool passesLightAt(int x, int y);
+    bool openDoorAt(int x, int y);
+
+    void printInfo() const;
 
     friend class Engine;
 };

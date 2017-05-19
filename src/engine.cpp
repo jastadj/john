@@ -149,12 +149,27 @@ bool Engine::initItems()
 
     m_Console->print("Loading items...");
 
-    Item *newitem = new Item;
+    Item *newitem = NULL;
+    Door *newdoor = NULL;
+
+    // item 0
+    newitem = new Item;
     newitem->setName("rock", "a ");
     newitem->setIcon('*');
     newitem->setColors(COLOR_WHITE, COLOR_BLACK, true);
     newitem->setValue(0.2);
     newitem->setWeight(1.0);
+    newitem->setPassesLight(true);
+    m_Items.push_back(newitem);
+
+    // item 1
+    newitem = new Item;
+    newitem->setName("door","a ");
+    newitem->setIcon('|');
+    newitem->setColors(COLOR_YELLOW, COLOR_BLACK, false);
+    newdoor = new Door(newitem);
+    newitem->setDoor(newdoor);
+    newitem->setPassesLight(false);
     m_Items.push_back(newitem);
 
     std::stringstream msg;
@@ -218,6 +233,7 @@ void Engine::newGame()
     newmap->fill(2);
     newmap->setTileAt(5,5,1);
     addItemToMap(newmap, newItem(0), 2, 2);
+    addItemToMap(newmap, newItem(1), 4, 4);
     m_Levels.push_back(newmap);
 
     // init camera
@@ -241,6 +257,9 @@ void Engine::setMainLoopEnvironment()
 
     // remove cursor
     curs_set(0);
+
+    // disable screen scrolling
+    scrollok(stdscr, false);
 }
 
 void Engine::mainLoop()
@@ -454,7 +473,7 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
 
             // los is blocked
             //if( !m_Tiles[tmap->getMapTileIndexAt(i, y1)].m_Glyph.m_PassesLight) return false;
-            if( !tmap->passesLightAt(i, y1)) return false;
+            if( !lightPassesThroughAt(i, y1)) return false;
         }
     }
     else if(run == 0)
@@ -473,7 +492,7 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
 
             // los is blocked
             //if( !m_Tiles[tmap->getMapTileIndexAt(x1, i)].m_Glyph.m_PassesLight) return false;
-            if( !tmap->passesLightAt(x1, i) ) return false;
+            if( !lightPassesThroughAt(x1, i) ) return false;
         }
     }
     // not ortho
@@ -498,7 +517,7 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
             // los is blocked
             //int tileindex = tmap->getMapTileIndexAt(i, int(ty));
             //if( !m_Tiles[tileindex].m_Glyph.m_PassesLight) return false;
-            if( !tmap->passesLightAt(i, int(ty)) ) return false;;
+            if( !lightPassesThroughAt(i, int(ty)) ) return false;;
         }
 
         //x sweep
@@ -524,7 +543,7 @@ bool Engine::inLOS(int x1, int y1, int x2, int y2)
             // los is blocked
             //int tileindex = tmap->getMapTileIndexAt( int(tx), i );
             //if( !m_Tiles[tileindex].m_Glyph.m_PassesLight) return false;
-            if( !tmap->passesLightAt( int(tx), i)) return false;
+            if( !lightPassesThroughAt( int(tx), i)) return false;
         }
 
     }
@@ -588,10 +607,7 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
     if(!noclip)
     {
         // tile is unwalkable
-        int ttile = tmap->getMapTileIndexAt(npos);
-
-        if(ttile < 0 || ttile >= int(m_Tiles.size()) ) return false;
-        if(!m_Tiles[ttile].m_Glyph.m_Walkable) return false;
+        if(!isWalkableAt(npos.x, npos.y)) return false;
     }
 
 
@@ -605,11 +621,18 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 
         if(!m_Items.empty())
         {
+            Item *doorfound = NULL;
+
             std::stringstream ifind;
             ifind << "You see ";
 
             for(int n = 0; n < int(m_Items.size()); n++)
             {
+                if(m_Items[n]->getDoor())
+                {
+                    doorfound = m_Items[n];
+                }
+
                 // if it's the last item in the list
                 if(n == int(m_Items.size())-1)
                 {
@@ -619,6 +642,18 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
             }
 
             addMessage(&m_MessageLog, ifind.str());
+
+            // if door was found
+            if(doorfound)
+            {
+                // if door was closed
+                if(!doorfound->getDoor()->isOpen())
+                {
+                    // open door
+                    doorfound->openDoor();
+                }
+            }
+
         }
 
         m_PlayerMoveCount++;
@@ -704,12 +739,65 @@ bool Engine::generateLevel(Map *tmap)
 
     return true;
 }
-
-const Tile *Engine::getTile(int index)
+bool Engine::lightPassesThroughAt(int x, int y, Map *tmap)
 {
-    if(index < 0 || index >= int(m_Tiles.size()) ) return NULL;
+    if(tmap == NULL) tmap = m_Levels[m_CurrentLevel];
 
-    return &m_Tiles[index];
+    vector2i dims = tmap->getDimensions();
+    Tile *ttile = NULL;
+    std::vector<Item*> titems;
+
+    // check x,y validity
+    if(int(x) >= dims.x || int(y) >= dims.y) return false;
+
+    // get tile at x,y and check if passes light
+    ttile = &m_Tiles[tmap->getMapTileIndexAt(x,y)];
+    if(!ttile) return false;
+    if( !ttile->m_Glyph.m_PassesLight ) return false;
+
+    // get items at x,y and check if passes light
+    titems = tmap->getItemsAt(x, y);
+    for(int i = 0; i < int(titems.size()); i++)
+    {
+        if( !titems[i]->getGlyph().m_PassesLight) return false;
+    }
+
+
+
+    return true;
+}
+
+bool Engine::isWalkableAt(int x, int y, Map *tmap)
+{
+    if(tmap == NULL) tmap = m_Levels[m_CurrentLevel];
+
+    vector2i dims = tmap->getDimensions();
+    Tile *ttile = NULL;
+    std::vector<Item*> titems;
+
+    // check x,y validity
+    if(int(x) >= dims.x || int(y) >= dims.y) return false;
+
+    // get tile at x,y and check if passes light
+    ttile = &m_Tiles[tmap->getMapTileIndexAt(x,y)];
+    if(!ttile) return false;
+    if( !ttile->m_Glyph.m_Walkable ) return false;
+
+    // get items at x,y and check if passes light
+    titems = tmap->getItemsAt(x, y);
+    for(int i = 0; i < int(titems.size()); i++)
+    {
+        if( !titems[i]->getGlyph().m_Walkable) return false;
+    }
+
+    return true;
+}
+
+bool Engine::openDoorAt(int x, int y, Map *tmap)
+{
+    if(!tmap) tmap = m_Levels[m_CurrentLevel];
+
+    return tmap->openDoorAt(x, y);
 }
 
 Item *Engine::newItem(int itmindex)
@@ -721,8 +809,7 @@ Item *Engine::newItem(int itmindex)
 
     if(tgtitem->getType() == OBJ_ITEM)
     {
-        newitem = new Item;
-        *newitem = *m_Items[itmindex];
+        newitem = new Item(*tgtitem);
     }
 
     return newitem;
