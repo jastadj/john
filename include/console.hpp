@@ -86,6 +86,8 @@ void itemMenu(std::vector<std::string> *cmd);
 void showItemInfo(std::vector<std::string> *cmd);
 void giveItemToPlayer(std::vector<std::string> *cmd);
 void printItemList(std::vector<std::string> *cmd);
+void printActorList(std::vector<std::string> *cmd);
+void showActorInfo(std::vector<std::string> *cmd);
 void printMap(std::vector<std::string> *cmd);
 void printMapItems(std::vector<std::string> *cmd);
 void mytest(std::vector<std::string> *cmd);

@@ -41,6 +41,7 @@ private:
     bool initColors();
     bool initTiles();
     bool initItems();
+    bool initActors();
 
     Camera m_Camera;
 
@@ -48,6 +49,7 @@ private:
     std::vector< std::vector <int> > m_ColorTable;
     std::vector<Tile> m_Tiles;
     std::vector<Item*> m_Items;
+    std::vector<Actor*> m_Actors;
 
     // console
     Console *m_Console;

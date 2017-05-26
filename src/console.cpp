@@ -84,6 +84,11 @@ bool Console::initCommands()
         newcmd->addCommand(new Command(Command::C_CMD, "give", "give item # to player", &giveItemToPlayer) );
     m_CommandList.push_back(newcmd);
 
+    newcmd = new Command(Command::C_SUBMENU, "actor", "Actor Menu", NULL);
+        newcmd->addCommand(new Command(Command::C_CMD, "list", "list actors", &printActorList));
+        newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show actor info (see list)", &showActorInfo));
+    m_CommandList.push_back(newcmd);
+
     newcmd = new Command(Command::C_SUBMENU, "map", "Map menu", NULL);
 		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print map info", &printMap) );
 		newcmd->addCommand(new Command(Command::C_CMD, "items", "Print map items", &printMapItems) );
@@ -548,6 +553,16 @@ void giveItemToPlayer(std::vector<std::string> *cmd)
     console->print("not implemented...");
     //Item *newitem = eptr->newItem(itemnum);
     //eptr->getPlayer()->addItemToInventory(newitem);
+}
+
+void printActorList(std::vector<std::string> *cmd)
+{
+
+}
+
+void showActorInfo(std::vector<std::string> *cmd)
+{
+
 }
 
 void printMap(std::vector<std::string> *cmd)

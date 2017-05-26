@@ -47,6 +47,7 @@ void Engine::start()
     if(ENABLE_COLOR) initColors();
     initTiles();
     initItems();
+    initActors();
 
     newGame();
 
@@ -179,6 +180,31 @@ bool Engine::initItems()
     initialized = true;
     return true;
 }
+
+bool Engine::initActors()
+{
+    static bool initialized = false;
+    if(initialized) return false;
+
+    m_Console->print("Loading actors...");
+
+    Actor *newactor = NULL;
+
+    newactor = new Actor();
+    newactor->setName("rat", "a");
+    newactor->setIcon('r');
+    newactor->setColors(COLOR_YELLOW, COLOR_BLACK, false);
+    m_Actors.push_back(newactor);
+
+
+    std::stringstream msg;
+    msg << m_Actors.size() << " actors loaded.";
+    m_Console->print(msg.str());
+
+    initialized = true;
+    return true;
+}
+
 
 void Engine::clearGame()
 {
