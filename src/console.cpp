@@ -274,6 +274,7 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
     // offset console printing within this rect
     recti crect(0,0,80,25);
 
+    // if a rect is not provided, assume entire screen
     if(trect != NULL) crect = *trect;
 
     move(crect.y, crect.x);
@@ -286,7 +287,8 @@ void printMessages(std::vector<ConsoleElement*> *tlist, recti *trect)
     }
 
     // print buffer
-    for(i = 0; i < int(tlist->size()); i++)
+    //for(i = 0; i < int(tlist->size()); i++)
+    for(i; i < int(tlist->size()); i++)
     {
 
         //reset colors
