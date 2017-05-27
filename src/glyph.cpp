@@ -20,6 +20,18 @@ void glyph::draw(int x, int y)
 {
     Engine *eptr = Engine::getInstance();
     int cpair = eptr->getColorPair( m_Color);
+
+
+    //reset colors
+    attrset( COLOR_PAIR(eptr->getColorPair(COLOR(COLOR_WHITE, COLOR_BLACK, false))) | A_NORMAL);
+
+    // if glyph is bold
+    if(m_Color.m_Bold) attrset( A_BOLD);
+
+    // set color
+    attron( COLOR_PAIR(eptr->getColorPair(m_Color)) );
+
+    // draw glyph
     mvaddch(y, x, m_Character);
 }
 
