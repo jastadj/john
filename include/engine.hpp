@@ -78,6 +78,8 @@ private:
     void printInventory(std::vector<Item*> *ilist);
     void openInventory();
     Item *dropItem();
+    bool addActorToMap(Map *tlevel, Actor *tactor, int x, int y);
+    Actor *newActor(int aindex);
 
     // level
     bool generateLevel(Map *tmap);
@@ -87,8 +89,9 @@ private:
 
     // items
     bool addItemToMap(Map *tlevel, Item *titem, int x, int y);
-    Item *getItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos);
+    Item *pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos);
     Item *newItem(int itmindex);
+
 
     // debug options
     std::vector<bool> m_DebugFlags;
@@ -103,6 +106,7 @@ public:
     int getColorPair(COLOR tcolor);
     const Map *getCurrentMap() { return m_Levels[m_CurrentLevel];}
     const std::vector<Item*> *getItemList() { return &m_Items;}
+    const std::vector<Actor*> *getActorList() { return &m_Actors;}
     const Actor *getPlayer();
     unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
 

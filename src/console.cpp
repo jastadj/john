@@ -557,12 +557,46 @@ void giveItemToPlayer(std::vector<std::string> *cmd)
 
 void printActorList(std::vector<std::string> *cmd)
 {
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
 
+    const std::vector<Actor*> *alist = eptr->getActorList();
+
+    for(int i = 0; i < int(alist->size()); i++)
+    {
+        std::stringstream msg;
+        msg << i << " - " << (*alist)[i]->getName();
+        console->print(msg.str());
+    }
 }
 
 void showActorInfo(std::vector<std::string> *cmd)
 {
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
 
+    int cmdlen = int(cmd->size());
+    int anum = -1;
+
+    const std::vector<Actor*> *alist = eptr->getActorList();
+
+    // invalid parameters
+    if(cmdlen != 3)
+    {
+        console->print("Invalid parameters!");
+        return;
+    }
+
+    // item number out of range
+    anum = atoi( (*cmd)[2].c_str());
+    if(anum < 0 || anum >= int(alist->size()) )
+    {
+        console->print("Actor #" + (*cmd)[2] + " out of range!");
+        return;
+    }
+
+    // print item info
+    (*alist)[anum]->printInfo();
 }
 
 void printMap(std::vector<std::string> *cmd)

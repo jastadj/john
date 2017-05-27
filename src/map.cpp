@@ -1,6 +1,7 @@
 #include "map.hpp"
 #include <cstdlib>
 #include "item.hpp"
+#include "actor.hpp"
 #include "console.hpp"
 #include <sstream>
 
@@ -120,6 +121,13 @@ bool Map::addItem(Item* nitem)
     return true;
 }
 
+bool Map::addActor(Actor *nactor)
+{
+    if(nactor == NULL) return false;
+    m_Actors.push_back(nactor);
+    return true;
+}
+
 std::vector<Item*> Map::getItemsAt(int x, int y)
 {
     std::vector<Item*> ilist;
@@ -167,6 +175,37 @@ bool Map::openDoorAt(int x, int y)
     }
 
     return false;
+}
+
+Actor *Map::getActorAt(int x, int y)
+{
+    Actor *tactor = NULL;
+
+    for(int i = 0; i < int(m_Actors.size()); i++)
+    {
+        vector2i ipos = m_Actors[i]->getPosition();
+
+        if(ipos.x == x && ipos.y == y) tactor = m_Actors[i];
+    }
+
+    return tactor;
+}
+
+Actor *Map::removeActorFromMap(Actor *tactor)
+{
+    if(tactor == NULL) return NULL;
+
+    for(int i = 0; i < int(m_Actors.size()); i++)
+    {
+        if(m_Actors[i] == tactor)
+        {
+            m_Actors.erase( m_Actors.begin() + i);
+
+            return tactor;
+        }
+    }
+
+    return NULL;
 }
 
 void Map::printInfo() const

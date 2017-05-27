@@ -260,6 +260,7 @@ void Engine::newGame()
     newmap->setTileAt(5,5,1);
     addItemToMap(newmap, newItem(0), 2, 2);
     addItemToMap(newmap, newItem(1), 4, 4);
+    addActorToMap(newmap, newActor(0), 0, 3);
     m_Levels.push_back(newmap);
 
     // init camera
@@ -366,7 +367,7 @@ void Engine::mainLoop()
         }
         else if(ch == int('g'))
         {
-            Item *titem = getItemFromMapAt(m_Player, m_Levels[m_CurrentLevel], m_Player->getPosition());
+            Item *titem = pickupItemFromMapAt(m_Player, m_Levels[m_CurrentLevel], m_Player->getPosition());
             if(titem != NULL)
             {
                 addMessage(&m_MessageLog, "You pick up " + titem->getArticle() + titem->getName() + ".");
@@ -443,6 +444,14 @@ void Engine::drawCamera(Camera *tcamera)
             {
                 glyph tglyph = ilist[k]->getGlyph();
                 tglyph.draw(drawpos.x, drawpos.y);
+            }
+
+            // draw actors
+            Actor *tactor = tmap->getActorAt(n, i);
+            if(tactor != NULL)
+            {
+                glyph tg = tactor->getGlyph();
+                tg.draw(drawpos.x, drawpos.y);
             }
         }
     }
@@ -816,6 +825,11 @@ bool Engine::isWalkableAt(int x, int y, Map *tmap)
         if( !titems[i]->getGlyph().m_Walkable) return false;
     }
 
+    // check if an actor occupies that space
+    if(tmap->getActorAt(x, y)) return false;
+    vector2i ppos = m_Player->getPosition();
+    if(ppos.x == x && ppos.y == y) return false;
+
     return true;
 }
 
@@ -862,7 +876,7 @@ bool Engine::addItemToMap(Map *tlevel, Item *titem, int x, int y)
     return true;
 }
 
-Item *Engine::getItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
+Item *Engine::pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
 {
     if(tactor == NULL || tlevel == NULL) return NULL;
 
@@ -973,6 +987,42 @@ Item *Engine::dropItem()
     }
 
     return NULL;
+}
+
+Actor *Engine::newActor(int aindex)
+{
+    if(aindex < 0 || aindex >= int(m_Actors.size()) ) return NULL;
+
+    Actor *newactor = NULL;
+    Actor *tgtactor = m_Actors[aindex];
+
+    if(tgtactor->getType() == OBJ_ACTOR)
+    {
+        newactor = new Actor(*tgtactor);
+    }
+
+    return newactor;
+}
+
+bool Engine::addActorToMap(Map *tlevel, Actor *tactor, int x, int y)
+{
+    // level and item valid?
+    if(tlevel == NULL) return false;
+    if(tactor == NULL) return false;
+
+    const std::vector<Actor*> *mapactors = tlevel->getActors();
+
+    // destination position in bounds?
+    vector2i mapdims = tlevel->getDimensions();
+    if(x < 0 || y < 0 || x >= mapdims.x || y >= mapdims.y) return false;
+
+    // set item position
+    tactor->setPosition(x, y);
+
+    // add item to map
+    tlevel->addActor(tactor);
+
+    return true;
 }
 /////////////////////////////////////////////////////////////////
 //
