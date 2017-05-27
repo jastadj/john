@@ -19,6 +19,7 @@ public:
     COLOR m_Color;
     bool m_Walkable;
     bool m_PassesLight;
+    bool m_CanPickup;
 
     void printInfo() const;
 

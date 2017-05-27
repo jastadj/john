@@ -161,6 +161,7 @@ bool Engine::initItems()
     newitem->setValue(0.2);
     newitem->setWeight(1.0);
     newitem->setPassesLight(true);
+    newitem->setCanPickup(true);
     m_Items.push_back(newitem);
 
     // item 1
@@ -171,6 +172,7 @@ bool Engine::initItems()
     newdoor = new Door(newitem);
     newitem->setDoor(newdoor);
     newitem->setPassesLight(false);
+    newitem->setCanPickup(false);
     m_Items.push_back(newitem);
 
     std::stringstream msg;
@@ -886,9 +888,13 @@ Item *Engine::pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
     // get first item in the list?
     for(int i = 0; i < int(ilist.size()); i++)
     {
-        Item *titem = tlevel->removeItemFromMap(ilist[i]);
-        tactor->addItemToInventory(titem);
-        return titem;
+        if(ilist[i]->canPickup())
+        {
+            Item *titem = tlevel->removeItemFromMap(ilist[i]);
+            tactor->addItemToInventory(titem);
+            return titem;
+        }
+
     }
 
     return NULL;

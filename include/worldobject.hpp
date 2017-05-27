@@ -38,6 +38,7 @@ public:
     glyph getGlyph() const { return m_Glyph;}
     bool isWalkable() { return m_Glyph.m_Walkable;}
     bool passesLight() { return m_Glyph.m_PassesLight;}
+    bool canPickup() { return m_Glyph.m_CanPickup;}
 
     void setName(std::string nname, std::string narticle);
     void setIcon(chtype nicon) {m_Glyph.m_Character = nicon;}
@@ -46,6 +47,7 @@ public:
     void setColors(int foreground, int background, bool bold);
     void setWalkable(bool nwalkable) { m_Glyph.m_Walkable = nwalkable;}
     void setPassesLight(bool nplight) { m_Glyph.m_PassesLight = nplight;}
+    void setCanPickup(bool npickup) { m_Glyph.m_CanPickup = npickup;}
 
     virtual void printInfo() const;
 
