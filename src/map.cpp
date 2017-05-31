@@ -25,7 +25,11 @@ Map::Map()
 
 Map::~Map()
 {
+    for(int i = 0; i < int(m_Items.size()); i++) delete m_Items[i];
+    m_Items.clear();
 
+    for(int i = 0; i < int(m_Actors.size()); i++) delete m_Actors[i];
+    m_Actors.clear();
 }
 
 vector2i Map::getDimensions() const
