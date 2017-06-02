@@ -608,6 +608,30 @@ void printMap(std::vector<std::string> *cmd)
 void printMapItems(std::vector<std::string> *cmd)
 {
     Engine *eptr = Engine::getInstance();
+    Console *console = Console::getInstance();
+
+    std::stringstream totitems;
+
+    const Map *tmap = eptr->getCurrentMap();
+    if(!tmap) return;
+    const std::vector<Item*> *titems = tmap->getItems();
+
+    int icount = int(titems->size());
+
+    console->print("Map Items");
+    console->print("---------");
+
+    for(int i = 0; i < icount; i++)
+    {
+        std::stringstream iss;
+        iss << i << ":" << (*titems)[i]->getName();
+        console->print( iss.str());
+    }
+
+    totitems << "Total Items:" << icount;
+    console->print( totitems.str());
+
+
 
 }
 

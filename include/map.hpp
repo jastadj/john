@@ -53,7 +53,7 @@ public:
 
     // map objects
     // map items
-    const std::vector<Item*> *getItems() { return &m_Items;}
+    const std::vector<Item*> *getItems() const { return &m_Items;}
     std::vector<Item*> getItemsAt(int x, int y);
     Item *removeItemFromMap(Item *titem);
     bool openDoorAt(int x, int y);
