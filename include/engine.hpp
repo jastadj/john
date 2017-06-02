@@ -90,7 +90,7 @@ private:
     // items
     bool addItemToMap(Map *tlevel, Item *titem, int x, int y);
     Item *pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos);
-    Item *newItem(int itmindex);
+
 
 
     // debug options
@@ -107,8 +107,11 @@ public:
     const Map *getCurrentMap() { return m_Levels[m_CurrentLevel];}
     const std::vector<Item*> *getItemList() { return &m_Items;}
     const std::vector<Actor*> *getActorList() { return &m_Actors;}
-    const Actor *getPlayer();
+    Actor *getPlayer();
     unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
+
+    // create item
+    Item *newItem(int itmindex);
 
     // debug
     bool toggleDebug(E_DEBUG dtype);

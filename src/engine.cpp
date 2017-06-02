@@ -900,7 +900,7 @@ Item *Engine::pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
     return NULL;
 }
 
-const Actor *Engine::getPlayer()
+Actor *Engine::getPlayer()
 {
 	return m_Player;
 }

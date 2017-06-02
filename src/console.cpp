@@ -550,9 +550,12 @@ void giveItemToPlayer(std::vector<std::string> *cmd)
     }
 
     // give item to player
-    console->print("not implemented...");
-    //Item *newitem = eptr->newItem(itemnum);
-    //eptr->getPlayer()->addItemToInventory(newitem);
+    Item *newitem = eptr->newItem(itemnum);
+    eptr->getPlayer()->addItemToInventory(newitem);
+
+    std::stringstream ss;
+    ss << newitem->getName() << " added to player";
+    console->print(ss.str());
 }
 
 void printActorList(std::vector<std::string> *cmd)

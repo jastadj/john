@@ -2,14 +2,39 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="include\actor.hpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\camera.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="251" topLine="10" />
+			<Cursor1 position="154" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\console.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\worldobject.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="15710" topLine="600" />
+			<Cursor1 position="450" topLine="11" />
+		</Cursor>
+	</File>
+	<File name="src\tools.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="331" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\map.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="316" topLine="15" />
+		</Cursor>
+	</File>
+	<File name="src\main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="166" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\item.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="89" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\glyph.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="341" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\engine.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
@@ -17,9 +42,9 @@
 			<Cursor1 position="5516" topLine="234" />
 		</Cursor>
 	</File>
-	<File name="include\console.hpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\console.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2266" topLine="81" />
+			<Cursor1 position="14238" topLine="539" />
 		</Cursor>
 	</File>
 	<File name="src\camera.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -29,47 +54,12 @@
 	</File>
 	<File name="src\actor.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="94" topLine="0" />
+			<Cursor1 position="277" topLine="9" />
 		</Cursor>
 	</File>
-	<File name="include\engine.hpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\worldobject.hpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1234" topLine="96" />
-		</Cursor>
-	</File>
-	<File name="include\camera.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="154" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\map.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="316" topLine="15" />
-		</Cursor>
-	</File>
-	<File name="src\worldobject.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="450" topLine="11" />
-		</Cursor>
-	</File>
-	<File name="include\map.hpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1112" topLine="48" />
-		</Cursor>
-	</File>
-	<File name="src\tools.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="331" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include\glyph.hpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="227" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\item.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="89" topLine="0" />
+			<Cursor1 position="195" topLine="35" />
 		</Cursor>
 	</File>
 	<File name="include\tools.hpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -77,9 +67,9 @@
 			<Cursor1 position="166" topLine="12" />
 		</Cursor>
 	</File>
-	<File name="src\main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\map.hpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="166" topLine="0" />
+			<Cursor1 position="1026" topLine="48" />
 		</Cursor>
 	</File>
 	<File name="include\item.hpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -87,14 +77,24 @@
 			<Cursor1 position="783" topLine="36" />
 		</Cursor>
 	</File>
-	<File name="src\glyph.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\glyph.hpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="341" topLine="0" />
+			<Cursor1 position="227" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\worldobject.hpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\engine.hpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="195" topLine="35" />
+			<Cursor1 position="2865" topLine="102" />
+		</Cursor>
+	</File>
+	<File name="include\console.hpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2153" topLine="62" />
+		</Cursor>
+	</File>
+	<File name="include\actor.hpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="336" topLine="10" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
