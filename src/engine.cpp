@@ -644,7 +644,20 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
     if(!noclip)
     {
         // tile is unwalkable
-        if(!isWalkableAt(npos.x, npos.y)) return false;
+        if(!isWalkableAt(npos.x, npos.y))
+        {
+            // if an actor is there (mob or player)
+            Actor *bactor = tmap->getActorAt(npos.x, npos.y);
+            if(!bactor && m_Player->getPosition().x == npos.x && m_Player->getPosition().y == npos.y) bactor = m_Player;
+
+            // if found actor is not current target actor, actor collision (attack)
+            if(bactor != tactor && bactor != NULL)
+            {
+                addMessage(&m_MessageLog, "actor hit!");
+            }
+
+            return false;
+        }
     }
 
 
