@@ -37,6 +37,8 @@ public:
     bool isOpen() const;
     bool isHorizontal() const;
 
+    void update() {};
+
     void setParent(Item *tparent) { m_Parent = tparent;}
     friend class Item;
 };
@@ -67,6 +69,7 @@ public:
     const Door *getDoor();
     bool openDoor();
 
+    void update() {};
 
     virtual void printInfo();
 };

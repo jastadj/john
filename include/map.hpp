@@ -63,6 +63,8 @@ public:
     Actor *getActorAt(int x, int y);
     Actor *removeActorFromMap(Actor *tactor);
 
+    void update();
+
     void printInfo() const;
 
     friend class Engine;

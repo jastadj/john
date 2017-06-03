@@ -316,9 +316,10 @@ void Engine::mainLoop()
 
         // draw
         drawCamera(&m_Camera);
-
         // draw message log
         printMessages(&m_MessageLog, &messagelogrect);
+        // draw ui
+        drawUI(40, 0 );
 
         // debug
         mvprintw(0,0, "key:%d", ch);
@@ -373,6 +374,10 @@ void Engine::mainLoop()
             if(titem != NULL)
             {
                 addMessage(&m_MessageLog, "You pick up " + titem->getArticle() + titem->getName() + ".");
+
+                // update
+                doTurn();
+
             }
         }
         else if(ch == int('i'))
@@ -384,6 +389,11 @@ void Engine::mainLoop()
             dropItem();
         }
     }
+}
+
+void Engine::doTurn()
+{
+    m_PlayerMoveCount++;
 }
 
 void Engine::drawCamera(Camera *tcamera)
@@ -467,6 +477,16 @@ void Engine::drawCamera(Camera *tcamera)
     }
 
 
+}
+
+void Engine::drawUI(int x, int y)
+{
+    std::stringstream uss;
+
+    mvprintw(y+1, x+2, m_Player->getName().c_str());
+
+    uss << "moves:" << m_PlayerMoveCount;
+    mvprintw(y+3, x+2, uss.str().c_str());
 }
 
 bool Engine::inLOS(int x1, int y1, int x2, int y2)
@@ -653,7 +673,10 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
             // if found actor is not current target actor, actor collision (attack)
             if(bactor != tactor && bactor != NULL)
             {
-                addMessage(&m_MessageLog, "actor hit!");
+                // combat
+
+                // update
+                doTurn();
             }
 
             return false;
@@ -706,8 +729,10 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 
         }
 
-        m_PlayerMoveCount++;
     }
+
+    // update
+    doTurn();
 
     return true;
 }
@@ -905,6 +930,7 @@ Item *Engine::pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
         {
             Item *titem = tlevel->removeItemFromMap(ilist[i]);
             tactor->addItemToInventory(titem);
+
             return titem;
         }
 
@@ -999,6 +1025,9 @@ Item *Engine::dropItem()
 
                 // add item to map
                 addItemToMap(m_Levels[m_CurrentLevel], titem, ppos.x, ppos.y);
+
+                // update
+                doTurn();
 
                 return titem;
             }

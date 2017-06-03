@@ -27,6 +27,7 @@ public:
     bool addItemToInventory(Item *titem);
     std::vector<Item*> *getInventory() { return &m_Inventory;}
 
+    void update();
     void printInfo() const;
 };
 #endif // CLASS_ACTOR

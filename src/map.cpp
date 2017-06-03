@@ -212,6 +212,11 @@ Actor *Map::removeActorFromMap(Actor *tactor)
     return NULL;
 }
 
+void Map::update()
+{
+
+}
+
 void Map::printInfo() const
 {
     Console *console = NULL;

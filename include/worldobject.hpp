@@ -49,6 +49,7 @@ public:
     void setPassesLight(bool nplight) { m_Glyph.m_PassesLight = nplight;}
     void setCanPickup(bool npickup) { m_Glyph.m_CanPickup = npickup;}
 
+    virtual void update()=0;
     virtual void printInfo() const;
 
 };

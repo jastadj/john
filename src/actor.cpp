@@ -19,6 +19,11 @@ bool Actor::addItemToInventory(Item *titem)
     m_Inventory.push_back(titem);
 }
 
+void Actor::update()
+{
+
+}
+
 void Actor::printInfo() const
 {
 	// print parent class

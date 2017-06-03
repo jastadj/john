@@ -66,11 +66,13 @@ private:
 
     // main
     void mainLoop();
+    void doTurn();
     void setMainLoopEnvironment();
 
     // draw
     void drawCamera(Camera *tcamera);
     bool inLOS(int x1, int y1, int x2, int y2);
+    void drawUI(int x, int y);
 
 
     // actor
@@ -102,13 +104,15 @@ public:
     void start();
 
     // get stuff from main engine
-    //std::vector< std::vector<int> > *getColorTable() { return &m_ColorTable;}
     int getColorPair(COLOR tcolor);
     const Map *getCurrentMap() { return m_Levels[m_CurrentLevel];}
     const std::vector<Item*> *getItemList() { return &m_Items;}
     const std::vector<Actor*> *getActorList() { return &m_Actors;}
     Actor *getPlayer();
     unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
+
+    // actor
+
 
     // create item
     Item *newItem(int itmindex);
