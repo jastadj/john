@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "worldobject.hpp"
+#include "attribute.hpp"
 
 // forward dec
 class Item;
@@ -14,6 +15,7 @@ private:
 
     int m_LOSRadius;
 
+    std::vector<Attribute> m_Attributes;
     std::vector<Item*> m_Inventory;
 
 public:
@@ -26,6 +28,8 @@ public:
 
     bool addItemToInventory(Item *titem);
     std::vector<Item*> *getInventory() { return &m_Inventory;}
+
+    bool isAlive();
 
     void update();
     void printInfo() const;

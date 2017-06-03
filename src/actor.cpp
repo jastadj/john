@@ -19,6 +19,12 @@ bool Actor::addItemToInventory(Item *titem)
     m_Inventory.push_back(titem);
 }
 
+bool Actor::isAlive()
+{
+
+    return true;
+}
+
 void Actor::update()
 {
 

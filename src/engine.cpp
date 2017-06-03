@@ -394,6 +394,13 @@ void Engine::mainLoop()
 void Engine::doTurn()
 {
     m_PlayerMoveCount++;
+
+    // update map and all objects on map
+    m_Levels[m_CurrentLevel]->update();
+
+    // update player
+    m_Player->update();
+
 }
 
 void Engine::drawCamera(Camera *tcamera)

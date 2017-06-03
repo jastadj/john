@@ -214,7 +214,27 @@ Actor *Map::removeActorFromMap(Actor *tactor)
 
 void Map::update()
 {
+    // update map items
+    for(int i = 0; i < int(m_Items.size()); i++) m_Items[i]->update();
 
+    // update map actors
+    for(int i = int(m_Actors.size())-1; i >= 0 ; i--)
+    {
+        m_Actors[i]->update();
+
+        // if actor is dead
+        if(!m_Actors[i]->isAlive())
+        {
+            // get actor reference
+            Actor *tactor = m_Actors[i];
+
+            // remove actor from map
+            removeActorFromMap(m_Actors[i]);
+
+            // delete actor
+            delete tactor;
+        }
+    }
 }
 
 void Map::printInfo() const
