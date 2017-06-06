@@ -9,6 +9,10 @@
 
 #include "color.hpp"
 
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
+
 class glyph
 {
 public:
@@ -24,5 +28,7 @@ public:
     void printInfo() const;
 
     void draw(int x, int y);
+
+    bool loadFromXMLNode(XMLNode *tnode);
 };
 #endif // CLASS_GLYPH

@@ -3,6 +3,8 @@
 #include "engine.hpp"  // for debug printinfo
 #include <sstream> // for debug printinfo
 
+using namespace tinyxml2;
+
 glyph::glyph()
 {
     m_Character = '?';
@@ -17,6 +19,38 @@ glyph::~glyph()
 
 }
 
+bool glyph::loadFromXMLNode(XMLNode *tnode)
+{
+    XMLNode *anode = NULL;
+
+    anode = tnode->FirstChild();
+
+
+    while(anode != NULL)
+    {
+        if(!strcmp(anode->Value(), "character")) m_Character = anode->ToElement()->GetText()[0];
+        else if(!strcmp(anode->Value(), "chtype"))
+        {
+            int chtypenum = 0;
+            anode->ToElement()->QueryIntText(&chtypenum);
+            m_Character = chtype(chtypenum);
+        }
+        else if(!strcmp(anode->Value(), "walkable"))
+        {
+            if( !strcmp(anode->ToElement()->GetText(), "true")) m_Walkable = true;
+            else m_Walkable = false;
+        }
+        else if(!strcmp(anode->Value(), "passesLight"))
+        {
+            if( !strcmp(anode->ToElement()->GetText(), "true")) m_PassesLight = true;
+            else m_PassesLight = false;
+        }
+
+        anode = anode->NextSibling();
+    }
+
+    return true;
+}
 void glyph::draw(int x, int y)
 {
     Engine *eptr = Engine::getInstance();

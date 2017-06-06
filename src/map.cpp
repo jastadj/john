@@ -13,6 +13,11 @@ using namespace tinyxml2;
 Tile::Tile()
 {
     m_Name = "unnamed";
+
+    // the id is basically the index # of the tile
+    // if the id is -1 on load, it will find an available id
+    // also, tiles with the same id will be overwritten
+    m_ID = -1;
 }
 
 Tile::~Tile()
@@ -24,8 +29,6 @@ bool Tile::loadFromXMLNode(XMLNode *tnode)
 {
     XMLNode *anode = NULL;
 
-    bool hasID = false;
-
     anode = tnode->FirstChild();
 
 
@@ -33,35 +36,17 @@ bool Tile::loadFromXMLNode(XMLNode *tnode)
     {
 
         if(!strcmp(anode->Value(),"name") ) m_Name = std::string(anode->ToElement()->GetText());
-        else if(!strcmp(anode->Value(), "character")) m_Glyph.m_Character = anode->ToElement()->GetText()[0];
-        else if(!strcmp(anode->Value(), "chtype"))
-        {
-            int chtypenum = 0;
-            anode->ToElement()->QueryIntText(&chtypenum);
-            m_Glyph.m_Character = chtype(chtypenum);
-        }
-        else if(!strcmp(anode->Value(), "walkable"))
-        {
-            if( !strcmp(anode->ToElement()->GetText(), "true")) m_Glyph.m_Walkable = true;
-            else m_Glyph.m_Walkable = false;
-        }
-        else if(!strcmp(anode->Value(), "passesLight"))
-        {
-            if( !strcmp(anode->ToElement()->GetText(), "true")) m_Glyph.m_PassesLight = true;
-            else m_Glyph.m_PassesLight = false;
-        }
         else if(!strcmp(anode->Value(), "id"))
         {
-            hasID = true;
             anode->ToElement()->QueryIntText(&m_ID);
+        }
+        else if(!strcmp(anode->Value(), "glyph"))
+        {
+            m_Glyph.loadFromXMLNode(anode);
         }
 
         anode = anode->NextSibling();
     }
-
-    // if no ID is provided, set ID to -1, this will be reassigned to an available ID
-    // in processXML
-    if(!hasID) m_ID = -1;
 
     return true;
 }

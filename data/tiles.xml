@@ -2,23 +2,29 @@
     <tiles>
         <tile>
             <name>NO TILE!</name>
-            <character>!</character>
-            <walkable>false</walkable>
-            <passesLight>true</passesLight>
+            <glyph>
+                <character>!</character>
+                <walkable>false</walkable>
+                <passesLight>true</passesLight>
+            </glyph>
             <id>0</id>
         </tile>
         <tile>
             <name>wall</name>
-            <chtype>219</chtype>
-            <walkable>false</walkable>
-            <passesLight>false</passesLight>
+            <glyph>
+                <chtype>219</chtype>
+                <walkable>false</walkable>
+                <passesLight>false</passesLight>
+            </glyph>
             <id>1</id>
         </tile>
         <tile>
             <name>floor</name>
-            <character>.</character>
-            <walkable>true</walkable>
-            <passesLight>true</passesLight>
+            <glyph>
+                <character>.</character>
+                <walkable>true</walkable>
+                <passesLight>true</passesLight>
+            </glyph>
             <id>2</id>
         </tile>        
     </tiles>
