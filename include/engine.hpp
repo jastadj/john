@@ -48,9 +48,12 @@ private:
     bool initCurses();
     bool initConsole();
     bool initColors();
-    bool initTiles();
+    // data init should go away, use init data instead once
+    // everything has transferred over to a "process xml" type function
+    bool initData();
     bool initItems();
     bool initActors();
+    bool processXML(std::string xfile);
 
     Camera m_Camera;
 

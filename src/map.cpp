@@ -24,10 +24,14 @@ bool Tile::loadFromXMLNode(XMLNode *tnode)
 {
     XMLNode *anode = NULL;
 
+    bool hasID = false;
+
     anode = tnode->FirstChild();
+
 
     while(anode != NULL)
     {
+
         if(!strcmp(anode->Value(),"name") ) m_Name = std::string(anode->ToElement()->GetText());
         else if(!strcmp(anode->Value(), "character")) m_Glyph.m_Character = anode->ToElement()->GetText()[0];
         else if(!strcmp(anode->Value(), "chtype"))
@@ -46,8 +50,18 @@ bool Tile::loadFromXMLNode(XMLNode *tnode)
             if( !strcmp(anode->ToElement()->GetText(), "true")) m_Glyph.m_PassesLight = true;
             else m_Glyph.m_PassesLight = false;
         }
+        else if(!strcmp(anode->Value(), "id"))
+        {
+            hasID = true;
+            anode->ToElement()->QueryIntText(&m_ID);
+        }
+
         anode = anode->NextSibling();
     }
+
+    // if no ID is provided, set ID to -1, this will be reassigned to an available ID
+    // in processXML
+    if(!hasID) m_ID = -1;
 
     return true;
 }

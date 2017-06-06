@@ -46,10 +46,14 @@ Engine *Engine::getInstance()
 
 void Engine::start()
 {
+    // init subsystem
     initCurses();
     initConsole();
     if(ENABLE_COLOR) initColors();
-    initTiles();
+
+    // init data
+    initData();
+    //initTiles();
     initItems();
     initActors();
 
@@ -111,21 +115,18 @@ bool Engine::initColors()
     return true;
 }
 
-bool Engine::initTiles()
+bool Engine::initData()
 {
-    static bool initialized = false;
-    if(initialized) return false;
+    // load tile data
+    if(!processXML(TILES_XML)) return false;
 
-    m_Console->print("Loading tiles...");
+    // load item data
 
-    tinyxml2::XMLDocument tdoc;
-    tdoc.LoadFile(TILES_XML);
+    // load actor data
 
-    XMLNode *root = tdoc.FirstChild();
-    XMLNode *tilesnode = root->FirstChildElement("tiles");
-    XMLNode *tnode = NULL;
 
-    if(!tilesnode)
+    // if no tiles are provided, create default tile
+    if(m_Tiles.empty())
     {
         // tile 0 = not used, index 0 should be no tile data
         Tile newtile;
@@ -134,51 +135,57 @@ bool Engine::initTiles()
         newtile.m_Name = "NO TILE!\n";
         m_Tiles.push_back(newtile);
 
-        std::cout << "no tiles found in xml\n";
+        m_Console->print("No tiles find during init, creating default tile.");
+    }
+
+    return true;
+}
+
+bool Engine::processXML(std::string xfile)
+{
+    m_Console->print(std::string("Processing xml file: " + xfile));
+
+    tinyxml2::XMLDocument tdoc;
+    if(tdoc.LoadFile(xfile.c_str()))
+    {
+        std::stringstream ess;
+        ess << "Error loading " << xfile;
+        m_Console->print(ess.str());
         return false;
     }
 
-    tnode = tilesnode->FirstChildElement("tile");
+    XMLNode *root = tdoc.FirstChild();
+    XMLNode *tilesnode = root->FirstChildElement("tiles");
+    XMLNode *tnode = NULL;
 
-    while(tnode != NULL)
+    int tilecount = 0;
+    std::stringstream tss;
+
+    if(tilesnode)
     {
-        m_Tiles.push_back(Tile());
-        m_Tiles.back().loadFromXMLNode(tnode);
 
-        tnode = tnode->NextSiblingElement("tile");
+        tnode = tilesnode->FirstChildElement("tile");
+
+        while(tnode != NULL)
+        {
+            tilecount++;
+
+            m_Tiles.push_back(Tile());
+            m_Tiles.back().loadFromXMLNode(tnode);
+
+            tnode = tnode->NextSiblingElement("tile");
+        }
+
     }
 
-    /*
-    // tile 0 = not used, index 0 should be no tile data
-    Tile newtile;
-    newtile.m_Glyph.m_Character = '!';
-    newtile.m_Glyph.m_Walkable = false;
-    newtile.m_Name = "NO TILE!\n";
-    m_Tiles.push_back(newtile);
+    m_Console->print("...done");
 
-    // tile 1 = wall
-    newtile = Tile();
-    newtile.m_Glyph.m_Character = chtype(219);
-    newtile.m_Glyph.m_Walkable = false;
-    newtile.m_Glyph.m_PassesLight = false;
-    newtile.m_Name = "wall";
-    m_Tiles.push_back(newtile);
+    tss << tilecount << " tiles loaded.";
+    m_Console->print(tss.str());
 
-    // tile 2 = floor
-    newtile = Tile();
-    newtile.m_Glyph.m_Character = '.';
-    newtile.m_Glyph.m_Walkable = true;
-    newtile.m_Name = "floor";
-    m_Tiles.push_back(newtile);
-    */
-
-    std::stringstream msg;
-    msg << m_Tiles.size() << " tiles loaded.";
-    m_Console->print(msg.str());
-
-    initialized = true;
     return true;
 }
+
 
 bool Engine::initItems()
 {

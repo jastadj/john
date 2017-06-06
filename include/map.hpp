@@ -29,6 +29,7 @@ public:
 
     std::string m_Name;
     glyph m_Glyph;
+    int m_ID;
 
     bool loadFromXMLNode(XMLNode *tnode);
 };
