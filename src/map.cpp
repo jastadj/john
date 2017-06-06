@@ -5,6 +5,11 @@
 #include "console.hpp"
 #include <sstream>
 
+// debug
+#include <iostream>
+
+using namespace tinyxml2;
+
 Tile::Tile()
 {
     m_Name = "unnamed";
@@ -15,6 +20,37 @@ Tile::~Tile()
 
 }
 
+bool Tile::loadFromXMLNode(XMLNode *tnode)
+{
+    XMLNode *anode = NULL;
+
+    anode = tnode->FirstChild();
+
+    while(anode != NULL)
+    {
+        if(!strcmp(anode->Value(),"name") ) m_Name = std::string(anode->ToElement()->GetText());
+        else if(!strcmp(anode->Value(), "character")) m_Glyph.m_Character = anode->ToElement()->GetText()[0];
+        else if(!strcmp(anode->Value(), "chtype"))
+        {
+            int chtypenum = 0;
+            anode->ToElement()->QueryIntText(&chtypenum);
+            m_Glyph.m_Character = chtype(chtypenum);
+        }
+        else if(!strcmp(anode->Value(), "walkable"))
+        {
+            if( !strcmp(anode->ToElement()->GetText(), "true")) m_Glyph.m_Walkable = true;
+            else m_Glyph.m_Walkable = false;
+        }
+        else if(!strcmp(anode->Value(), "passesLight"))
+        {
+            if( !strcmp(anode->ToElement()->GetText(), "true")) m_Glyph.m_PassesLight = true;
+            else m_Glyph.m_PassesLight = false;
+        }
+        anode = anode->NextSibling();
+    }
+
+    return true;
+}
 
 /////////////////////////////////////////////////////////
 //

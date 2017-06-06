@@ -13,6 +13,10 @@
 #include "tools.hpp"
 #include "glyph.hpp"
 
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
+
 // forward declaration
 class Item;
 class Actor;
@@ -25,6 +29,8 @@ public:
 
     std::string m_Name;
     glyph m_Glyph;
+
+    bool loadFromXMLNode(XMLNode *tnode);
 };
 
 class Map

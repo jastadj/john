@@ -1,0 +1,22 @@
+<rl>
+    <tiles>
+        <tile>
+            <name>NO TILE!</name>
+            <character>!</character>
+            <walkable>false</walkable>
+            <passesLight>true</passesLight>
+        </tile>
+        <tile>
+            <name>wall</name>
+            <chtype>219</chtype>
+            <walkable>false</walkable>
+            <passesLight>false</passesLight>
+        </tile>
+        <tile>
+            <name>floor</name>
+            <character>.</character>
+            <walkable>true</walkable>
+            <passesLight>true</passesLight>
+        </tile>        
+    </tiles>
+</rl>

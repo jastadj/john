@@ -3,6 +3,10 @@
 #include <cmath>
 #include <sstream>
 
+#include <iostream>
+
+using namespace tinyxml2;
+
 Engine *Engine::m_Instance = NULL;
 
 Engine::Engine()
@@ -113,6 +117,38 @@ bool Engine::initTiles()
     if(initialized) return false;
 
     m_Console->print("Loading tiles...");
+
+    tinyxml2::XMLDocument tdoc;
+    tdoc.LoadFile(TILES_XML);
+
+    XMLNode *root = tdoc.FirstChild();
+    XMLNode *tilesnode = root->FirstChildElement("tiles");
+    XMLNode *tnode = NULL;
+
+    if(!tilesnode)
+    {
+        // tile 0 = not used, index 0 should be no tile data
+        Tile newtile;
+        newtile.m_Glyph.m_Character = '!';
+        newtile.m_Glyph.m_Walkable = false;
+        newtile.m_Name = "NO TILE!\n";
+        m_Tiles.push_back(newtile);
+
+        std::cout << "no tiles found in xml\n";
+        return false;
+    }
+
+    tnode = tilesnode->FirstChildElement("tile");
+
+    while(tnode != NULL)
+    {
+        m_Tiles.push_back(Tile());
+        m_Tiles.back().loadFromXMLNode(tnode);
+
+        tnode = tnode->NextSiblingElement("tile");
+    }
+
+    /*
     // tile 0 = not used, index 0 should be no tile data
     Tile newtile;
     newtile.m_Glyph.m_Character = '!';
@@ -134,6 +170,7 @@ bool Engine::initTiles()
     newtile.m_Glyph.m_Walkable = true;
     newtile.m_Name = "floor";
     m_Tiles.push_back(newtile);
+    */
 
     std::stringstream msg;
     msg << m_Tiles.size() << " tiles loaded.";
@@ -423,6 +460,9 @@ void Engine::drawCamera(Camera *tcamera)
     // get player line of sight radius
     int pradius = m_Player->getLOSRadius();
 
+    // get tile count
+    int tilecount = int(m_Tiles.size());
+
     //draw map
     for(int i = cpos.y; i < cpos.y + cheight; i++)
     {
@@ -455,7 +495,8 @@ void Engine::drawCamera(Camera *tcamera)
 
             // draw
             //mvaddch(drawpos.y, drawpos.x, ttile);
-            m_Tiles[tileindex].m_Glyph.draw(drawpos.x, drawpos.y);
+            if(tileindex < tilecount && tileindex >= 0)
+                m_Tiles[tileindex].m_Glyph.draw(drawpos.x, drawpos.y);
 
             //draw items
             std::vector<Item*> ilist = tmap->getItemsAt(n, i);
@@ -833,7 +874,9 @@ bool Engine::lightPassesThroughAt(int x, int y, Map *tmap)
     if(int(x) >= dims.x || int(y) >= dims.y) return false;
 
     // get tile at x,y and check if passes light
-    ttile = &m_Tiles[tmap->getMapTileIndexAt(x,y)];
+    int ti = tmap->getMapTileIndexAt(x,y);
+    if(ti >= int(m_Tiles.size()) ) return false;
+    ttile = &m_Tiles[ti];
     if(!ttile) return false;
     if( !ttile->m_Glyph.m_PassesLight ) return false;
 

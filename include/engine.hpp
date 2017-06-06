@@ -17,8 +17,17 @@
 #include "console.hpp"
 #include "item.hpp"
 
+#include <tinyxml2.h>
+
 #define ENABLE_COLOR 1
 #define MAX_COLORS 8
+
+
+#define TILES_XML ".\\data\\tiles.xml"
+
+
+// namespace
+using namespace tinyxml2;
 
 // forward declarations
 class Actor;
