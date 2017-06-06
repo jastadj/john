@@ -643,7 +643,8 @@ void colortest(std::vector<std::string> *cmd)
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
 
-    for(int i = 0; i < MAX_COLORS; i++)
+    //for(int i = 0; i < MAX_COLORS; i++)
+    for(int i = 0; i < 1; i++)
     {
         for(int n = 0; n < MAX_COLORS; n++)
         {
