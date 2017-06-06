@@ -52,6 +52,7 @@
 		<Unit filename="include/worldobject.hpp" />
 		<Unit filename="src/actor.cpp" />
 		<Unit filename="src/camera.cpp" />
+		<Unit filename="src/color.cpp" />
 		<Unit filename="src/console.cpp" />
 		<Unit filename="src/engine.cpp" />
 		<Unit filename="src/glyph.cpp" />

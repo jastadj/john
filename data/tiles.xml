@@ -6,6 +6,11 @@
                 <character>!</character>
                 <walkable>false</walkable>
                 <passesLight>true</passesLight>
+                <color>
+                    <fg>7</fg>
+                    <bg>0</bg>
+                    <bold>false</bold>
+                </color>
             </glyph>
             <id>0</id>
         </tile>
@@ -15,6 +20,11 @@
                 <chtype>219</chtype>
                 <walkable>false</walkable>
                 <passesLight>false</passesLight>
+                <color>
+                    <fg>7</fg>
+                    <bg>0</bg>
+                    <bold>false</bold>
+                </color>
             </glyph>
             <id>1</id>
         </tile>
@@ -24,6 +34,11 @@
                 <character>.</character>
                 <walkable>true</walkable>
                 <passesLight>true</passesLight>
+                <color>
+                    <fg>7</fg>
+                    <bg>0</bg>
+                    <bold>false</bold>
+                </color>
             </glyph>
             <id>2</id>
         </tile>        

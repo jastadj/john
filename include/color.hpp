@@ -2,6 +2,10 @@
 
 #define CLASS_COLOR
 
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
+
 bool initColors();
 
 struct COLOR
@@ -18,5 +22,7 @@ struct COLOR
     int m_Background;
     bool m_Bold;
 };
+
+COLOR loadColorFromXMLNode(XMLNode *tnode);
 
 #endif // CLASS_COLOR

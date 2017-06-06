@@ -45,6 +45,10 @@ bool glyph::loadFromXMLNode(XMLNode *tnode)
             if( !strcmp(anode->ToElement()->GetText(), "true")) m_PassesLight = true;
             else m_PassesLight = false;
         }
+        else if(!strcmp(anode->Value(), "color"))
+        {
+            m_Color = loadColorFromXMLNode(anode);
+        }
 
         anode = anode->NextSibling();
     }
