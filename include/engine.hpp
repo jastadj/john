@@ -24,6 +24,7 @@
 
 
 #define TILES_XML ".\\data\\tiles.xml"
+#define ITEMS_XML ".\\data\\items.xml"
 
 
 // namespace
@@ -51,7 +52,6 @@ private:
     // data init should go away, use init data instead once
     // everything has transferred over to a "process xml" type function
     bool initData();
-    bool initItems();
     bool initActors();
     bool processXML(std::string xfile);
 

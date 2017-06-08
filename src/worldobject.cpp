@@ -2,6 +2,8 @@
 #include "console.hpp"
 #include <sstream>
 
+using namespace tinyxml2;
+
 WorldObject::WorldObject()
 {
     m_Name = "unnamed";
@@ -38,6 +40,31 @@ void WorldObject::setColors(int foreground, int background, bool bold)
 {
     COLOR tcolor(foreground, background, bold);
     m_Glyph.m_Color = tcolor;
+}
+
+bool WorldObject::loadFromXMLNode(XMLNode *tnode)
+{
+    XMLNode *anode = NULL;
+
+    anode = tnode->FirstChild();
+
+    while(anode != NULL)
+    {
+
+        if(!strcmp(anode->Value(),"name") ) m_Name = std::string(anode->ToElement()->GetText());
+        else if(!strcmp(anode->Value(), "article"))
+        {
+            m_Article = anode->ToElement()->GetText();
+        }
+        else if(!strcmp(anode->Value(), "glyph"))
+        {
+            m_Glyph.loadFromXMLNode(anode);
+        }
+
+        anode = anode->NextSibling();
+    }
+
+    return true;
 }
 
 void WorldObject::printInfo() const

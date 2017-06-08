@@ -7,7 +7,7 @@
             <weight>1.0</weight>
             <glyph>
                 <character>*</character>
-                <walkable>false</walkable>
+                <walkable>true</walkable>
                 <passesLight>true</passesLight>
                 <color>
                     <fg>7</fg>
@@ -15,7 +15,6 @@
                     <bold>false</bold>
                 </color>
             </glyph>
-            <id>0</id>
         </item>    
         <item>
             <name>door</name>
@@ -23,16 +22,18 @@
             <value>1.0</value>
             <weight>1.0</weight>
             <glyph>
-                <character>!</character>
+                <character>|</character>
                 <walkable>false</walkable>
-                <passesLight>true</passesLight>
+                <passesLight>false</passesLight>
                 <color>
-                    <fg>7</fg>
+                    <fg>6</fg>
                     <bg>0</bg>
                     <bold>false</bold>
                 </color>
             </glyph>
-            <id>0</id>
+            <door>
+                <state>0</state>
+            </door>
         </item>         
     </items>
 </rl>

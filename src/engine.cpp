@@ -54,7 +54,7 @@ void Engine::start()
     // init data
     initData();
     //initTiles();
-    initItems();
+    //initItems();
     initActors();
 
     newGame();
@@ -121,7 +121,7 @@ bool Engine::initData()
     if(!processXML(TILES_XML)) return false;
 
     // load item data
-
+    if(!processXML(ITEMS_XML)) return false;
     // load actor data
 
 
@@ -154,13 +154,18 @@ bool Engine::processXML(std::string xfile)
         return false;
     }
 
+    // look for important nodes
     XMLNode *root = tdoc.FirstChild();
     XMLNode *tilesnode = root->FirstChildElement("tiles");
+    XMLNode *itemsnode = root->FirstChildElement("items");
     XMLNode *tnode = NULL;
 
+    // diagnostics
     int tilecount = 0;
+    int itemcount = 0;
     std::stringstream tss;
 
+    // process tiles first
     if(tilesnode)
     {
 
@@ -178,52 +183,29 @@ bool Engine::processXML(std::string xfile)
 
     }
 
+    // process items second
+    if(itemsnode)
+    {
+        tnode = itemsnode->FirstChildElement("item");
+
+        while(tnode != NULL)
+        {
+            itemcount++;
+
+            m_Items.push_back(new Item);
+            m_Items.back()->loadFromXMLNode(tnode);
+
+            tnode = tnode->NextSiblingElement("item");
+        }
+    }
+
     m_Console->print("...done");
 
-    tss << tilecount << " tiles loaded.";
-    m_Console->print(tss.str());
+    tss << tilecount << " tiles loaded from xml.";
+    if(tilecount) m_Console->print(tss.str());
+    tss.str() = std::string("");
+    if(itemcount) tss << itemcount << " items loaded from xml.";
 
-    return true;
-}
-
-
-bool Engine::initItems()
-{
-    static bool initialized = false;
-    if(initialized) return false;
-
-    m_Console->print("Loading items...");
-
-    Item *newitem = NULL;
-    Door *newdoor = NULL;
-
-    // item 0
-    newitem = new Item;
-    newitem->setName("rock", "a ");
-    newitem->setIcon('*');
-    newitem->setColors(COLOR_WHITE, COLOR_BLACK, true);
-    newitem->setValue(0.2);
-    newitem->setWeight(1.0);
-    newitem->setPassesLight(true);
-    newitem->setCanPickup(true);
-    m_Items.push_back(newitem);
-
-    // item 1
-    newitem = new Item;
-    newitem->setName("door","a ");
-    newitem->setIcon('|');
-    newitem->setColors(COLOR_YELLOW, COLOR_BLACK, false);
-    newdoor = new Door(newitem);
-    newitem->setDoor(newdoor);
-    newitem->setPassesLight(false);
-    newitem->setCanPickup(false);
-    m_Items.push_back(newitem);
-
-    std::stringstream msg;
-    msg << m_Items.size() << " items loaded.";
-    m_Console->print(msg.str());
-
-    initialized = true;
     return true;
 }
 
@@ -721,6 +703,9 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
         // tile is unwalkable
         if(!isWalkableAt(npos.x, npos.y))
         {
+            // get items at blocked position
+            std::vector<Item*> titems = m_Levels[m_CurrentLevel]->getItemsAt( npos.x, npos.y);
+
             // if an actor is there (mob or player)
             Actor *bactor = tmap->getActorAt(npos.x, npos.y);
             if(!bactor && m_Player->getPosition().x == npos.x && m_Player->getPosition().y == npos.y) bactor = m_Player;
@@ -732,6 +717,26 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 
                 // update
                 doTurn();
+            }
+            // check if colliding with a closed door
+            else
+            {
+                // check each item in list at position
+                for(int i = 0; i < int(titems.size()); i++)
+                {
+                    // if door is found in list
+                    if( titems[i]->getDoor())
+                    {
+
+                        // attempt to open door
+                        if(titems[i]->openDoor())
+                        {
+                            // if successful, do turn
+                            doTurn();
+                            return false;
+                        }
+                    }
+                }
             }
 
             return false;
@@ -745,42 +750,25 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
     // if actor is player, find and print any items at their feet
     if(tactor == m_Player)
     {
-        std::vector<Item*> m_Items = m_Levels[m_CurrentLevel]->getItemsAt( m_Player->getPosition().x, m_Player->getPosition().y);
+        std::vector<Item*> titems = m_Levels[m_CurrentLevel]->getItemsAt( m_Player->getPosition().x, m_Player->getPosition().y);
 
-        if(!m_Items.empty())
+        if(!titems.empty())
         {
-            Item *doorfound = NULL;
 
             std::stringstream ifind;
             ifind << "You see ";
 
-            for(int n = 0; n < int(m_Items.size()); n++)
+            for(int n = 0; n < int(titems.size()); n++)
             {
-                if(m_Items[n]->getDoor())
-                {
-                    doorfound = m_Items[n];
-                }
-
                 // if it's the last item in the list
-                if(n == int(m_Items.size())-1)
+                if(n == int(titems.size())-1)
                 {
-                    ifind << m_Items[n]->getArticle() << m_Items[n]->getName() << ".";
+                    ifind << titems[n]->getArticle() << titems[n]->getName() << ".";
                 }
-                else ifind << m_Items[n]->getArticle() << m_Items[n]->getName() << ",";
+                else ifind << titems[n]->getArticle() << titems[n]->getName() << ",";
             }
 
             addMessage(&m_MessageLog, ifind.str());
-
-            // if door was found
-            if(doorfound)
-            {
-                // if door was closed
-                if(!doorfound->getDoor()->isOpen())
-                {
-                    // open door
-                    doorfound->openDoor();
-                }
-            }
 
         }
 

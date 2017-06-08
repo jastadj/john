@@ -2,6 +2,8 @@
 #include "console.hpp"
 #include <sstream>
 
+using namespace tinyxml2;
+
 Item::Item()
 {
     m_Value = 0;
@@ -51,6 +53,32 @@ bool Item::openDoor()
     return false;
 }
 
+bool Item::loadFromXMLNode(XMLNode *tnode)
+{
+    XMLNode *anode = NULL;
+
+    anode = tnode->FirstChild();
+
+    // process base class
+    WorldObject::loadFromXMLNode(tnode);
+
+    while(anode != NULL)
+    {
+        if(!strcmp(anode->Value(),"value") ) anode->ToElement()->QueryFloatText(&m_Value);
+        else if(!strcmp(anode->Value(),"weight") ) anode->ToElement()->QueryFloatText(&m_Weight);
+        else if(!strcmp(anode->Value(),"door"))
+        {
+            // create door
+            Door *newdoor = new Door(this);
+        }
+
+
+        anode = anode->NextSibling();
+    }
+
+    return true;
+}
+
 void Item::printInfo()
 {
 	// print parent class
@@ -85,6 +113,8 @@ Door::Door(Item *tparent)
     m_DoorChars[DOOR_VERT_OPEN] = '\\'; // vert open
     m_DoorChars[DOOR_HORIZ_CLOSED] = '-'; // horiz closed
     m_DoorChars[DOOR_HORIZ_OPEN] = '\\'; // horiz open
+
+    tparent->setDoor(this);
 }
 
 Door::Door(const Door &tdoor, Item *tparent)
@@ -110,10 +140,11 @@ void Door::open()
     if(isHorizontal()) m_Parent->setIcon(m_DoorChars[DOOR_HORIZ_OPEN]);
     else m_Parent->setIcon(m_DoorChars[DOOR_VERT_OPEN]);
 
-    // allow light to pass
+    // allow light to pass and make walkable
     if(m_Parent)
     {
         m_Parent->setPassesLight(true);
+        m_Parent->setWalkable(true);
     }
 
 }
@@ -125,10 +156,11 @@ void Door::close()
     if(isHorizontal()) m_Parent->setIcon(m_DoorChars[DOOR_HORIZ_CLOSED]);
     else m_Parent->setIcon(m_DoorChars[DOOR_VERT_CLOSED]);
 
-    // dont allow light ot pass
+    // dont allow light ot pass and make non-walkable
     if(m_Parent)
     {
         m_Parent->setPassesLight(false);
+        m_Parent->setWalkable(false);
     }
 }
 
@@ -157,6 +189,8 @@ bool Door::isHorizontal() const
 {
     return m_State&0x02;
 }
+
+
 
 void Door::printInfo() const
 {

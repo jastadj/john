@@ -12,6 +12,10 @@
 #include "tools.hpp"
 #include "glyph.hpp"
 
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
+
 enum OBJTYPE{ OBJ_ACTOR, OBJ_ITEM, OBJ_TOTAL};
 
 class WorldObject
@@ -50,6 +54,7 @@ public:
     void setCanPickup(bool npickup) { m_Glyph.m_CanPickup = npickup;}
 
     virtual void update()=0;
+    virtual bool loadFromXMLNode(XMLNode *tnode);
     virtual void printInfo() const;
 
 };

@@ -4,6 +4,10 @@
 #include "worldobject.hpp"
 #include <vector>
 
+#include <tinyxml2.h>
+
+using namespace tinyxml2;
+
 // forward dec
 class Item;
 
@@ -71,6 +75,7 @@ public:
 
     void update() {};
 
+    bool loadFromXMLNode(XMLNode *tnode);
     virtual void printInfo();
 };
 

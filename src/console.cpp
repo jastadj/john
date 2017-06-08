@@ -92,6 +92,7 @@ bool Console::initCommands()
     newcmd = new Command(Command::C_SUBMENU, "map", "Map menu", NULL);
 		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print map info", &printMap) );
 		newcmd->addCommand(new Command(Command::C_CMD, "items", "Print map items", &printMapItems) );
+		newcmd->addCommand(new Command(Command::C_CMD, "item", " show item #", &showMapItem));
 	m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
@@ -634,8 +635,35 @@ void printMapItems(std::vector<std::string> *cmd)
     totitems << "Total Items:" << icount;
     console->print( totitems.str());
 
+}
 
+void showMapItem(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
 
+    int cmdlen = int(cmd->size());
+    int itemnum = -1;
+
+    const std::vector<Item*> *ilist = eptr->getCurrentMap()->getItems();
+
+    // invalid parameters
+    if(cmdlen != 3)
+    {
+        console->print("Invalid parameters!");
+        return;
+    }
+
+    // item number out of range
+    itemnum = atoi( (*cmd)[2].c_str());
+    if(itemnum < 0 || itemnum >= int(ilist->size()) )
+    {
+        console->print("Item #" + (*cmd)[2] + " out of range!");
+        return;
+    }
+
+    // print item info
+    (*ilist)[itemnum]->printInfo();
 }
 
 void colortest(std::vector<std::string> *cmd)
