@@ -158,11 +158,13 @@ bool Engine::processXML(std::string xfile)
     XMLNode *root = tdoc.FirstChild();
     XMLNode *tilesnode = root->FirstChildElement("tiles");
     XMLNode *itemsnode = root->FirstChildElement("items");
+    XMLNode *actorsnode = root->FirstChildElement("actors");
     XMLNode *tnode = NULL;
 
     // diagnostics
     int tilecount = 0;
     int itemcount = 0;
+    int actorscount = 0;
     std::stringstream tss;
 
     // process tiles first
@@ -196,6 +198,22 @@ bool Engine::processXML(std::string xfile)
             m_Items.back()->loadFromXMLNode(tnode);
 
             tnode = tnode->NextSiblingElement("item");
+        }
+    }
+
+    // process actors third
+    if(actorsnode)
+    {
+        tnode = actorsnode->FirstChildElement("actor");
+
+        while(tnode != NULL)
+        {
+            actorscount++;
+
+            m_Actors.push_back(new Actor);
+            m_Actors.back()->loadFromXMLNode(tnode);
+
+            tnode = tnode->NextSiblingElement("actor");
         }
     }
 

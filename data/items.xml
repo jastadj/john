@@ -1,6 +1,7 @@
 <rl>
     <items>
         <item>
+            <id>0</id>
             <name>rock</name>
             <article>a</article>
             <value>0.2</value>
@@ -17,6 +18,7 @@
             </glyph>
         </item>    
         <item>
+            <id>1</id>
             <name>door</name>
             <article>a</article>
             <value>1.0</value>

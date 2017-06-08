@@ -21,6 +21,9 @@ enum OBJTYPE{ OBJ_ACTOR, OBJ_ITEM, OBJ_TOTAL};
 class WorldObject
 {
 protected:
+
+    int m_ID;
+
     std::string m_Name;
     std::string m_Article;
     vector2i m_Position;
@@ -33,6 +36,7 @@ public:
     virtual ~WorldObject();
     virtual OBJTYPE getType()=0;
 
+    int getID() { return m_ID;}
     std::string getName() const { return m_Name;}
     std::string getArticle() const { return m_Article;}
     chtype getIcon() { return m_Glyph.m_Character;}

@@ -8,6 +8,8 @@ WorldObject::WorldObject()
 {
     m_Name = "unnamed";
 
+    m_ID = -1;
+
 }
 
 WorldObject::WorldObject(const WorldObject &tobj)
@@ -52,6 +54,7 @@ bool WorldObject::loadFromXMLNode(XMLNode *tnode)
     {
 
         if(!strcmp(anode->Value(),"name") ) m_Name = std::string(anode->ToElement()->GetText());
+        else if(!strcmp(anode->Value(), "id")) anode->ToElement()->QueryIntText(&m_ID);
         else if(!strcmp(anode->Value(), "article"))
         {
             m_Article = anode->ToElement()->GetText();
