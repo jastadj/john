@@ -760,12 +760,16 @@ bool Engine::walkActor(Actor *tactor, int dir, bool noclip)
 
             for(int n = 0; n < int(titems.size()); n++)
             {
-                // if it's the last item in the list
-                if(n == int(titems.size())-1)
-                {
-                    ifind << titems[n]->getArticle() << titems[n]->getName() << ".";
-                }
-                else ifind << titems[n]->getArticle() << titems[n]->getName() << ",";
+                // if item has article add a space after
+                if(titems[n]->getArticle() != "")
+                    ifind << titems[n]->getArticle() << " ";
+
+                // add item name
+                ifind << titems[n]->getName();
+
+                // determine separator
+                if(n == int(titems.size())-1) ifind << ".";
+                else ifind << ",";
             }
 
             addMessage(&m_MessageLog, ifind.str());
