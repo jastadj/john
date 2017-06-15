@@ -91,6 +91,8 @@ void showActorInfo(std::vector<std::string> *cmd);
 void printMap(std::vector<std::string> *cmd);
 void printMapItems(std::vector<std::string> *cmd);
 void showMapItem(std::vector<std::string> *cmd);
+void printMapActors(std::vector<std::string> *cmd);
+void showMapActor(std::vector<std::string> *cmd);
 void mytest(std::vector<std::string> *cmd);
 void colortest(std::vector<std::string> *cmd);
 void printPlayer(std::vector<std::string> *cmd);

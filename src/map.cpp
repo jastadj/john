@@ -288,4 +288,8 @@ void Map::printInfo() const
     sstr << "Item Count : " << m_Items.size();
     console->print(sstr.str());
 
+    sstr.str(std::string());
+    sstr << "Actor Count : " << m_Actors.size();
+    console->print(sstr.str());
+
 }

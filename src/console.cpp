@@ -93,6 +93,8 @@ bool Console::initCommands()
 		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print map info", &printMap) );
 		newcmd->addCommand(new Command(Command::C_CMD, "items", "Print map items", &printMapItems) );
 		newcmd->addCommand(new Command(Command::C_CMD, "item", " show item #", &showMapItem));
+		newcmd->addCommand(new Command(Command::C_CMD, "actors", "Print map actors", &printMapActors) );
+		newcmd->addCommand(new Command(Command::C_CMD, "actor", " show actor #", &showMapActor) );
 	m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
@@ -664,6 +666,63 @@ void showMapItem(std::vector<std::string> *cmd)
 
     // print item info
     (*ilist)[itemnum]->printInfo();
+}
+
+void printMapActors(std::vector<std::string> *cmd)
+{
+    Engine *eptr = Engine::getInstance();
+    Console *console = Console::getInstance();
+
+    std::stringstream totactors;
+
+    const Map *tmap = eptr->getCurrentMap();
+    if(!tmap) return;
+    const std::vector<Actor*> *tactors = tmap->getActors();
+
+    int acount = int(tactors->size());
+
+    console->print("Map Actors");
+    console->print("----------");
+
+    for(int i = 0; i < acount; i++)
+    {
+        std::stringstream iss;
+        iss << i << ":" << (*tactors)[i]->getName();
+        console->print( iss.str());
+    }
+
+    totactors << "Total Items:" << acount;
+    console->print( totactors.str());
+
+}
+
+void showMapActor(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
+
+    int cmdlen = int(cmd->size());
+    int actornum = -1;
+
+    const std::vector<Actor*> *alist = eptr->getCurrentMap()->getActors();
+
+    // invalid parameters
+    if(cmdlen != 3)
+    {
+        console->print("Invalid parameters!");
+        return;
+    }
+
+    // item number out of range
+    actornum = atoi( (*cmd)[2].c_str());
+    if(actornum < 0 || actornum >= int(alist->size()) )
+    {
+        console->print("Actor #" + (*cmd)[2] + " out of range!");
+        return;
+    }
+
+    // print item info
+    (*alist)[actornum]->printInfo();
 }
 
 void colortest(std::vector<std::string> *cmd)

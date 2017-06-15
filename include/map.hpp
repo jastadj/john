@@ -66,7 +66,7 @@ public:
     bool openDoorAt(int x, int y);
 
     // map actors
-    const std::vector<Actor*> *getActors() { return &m_Actors;}
+    const std::vector<Actor*> *getActors() const { return &m_Actors;}
     Actor *getActorAt(int x, int y);
     Actor *removeActorFromMap(Actor *tactor);
 
