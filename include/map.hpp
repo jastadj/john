@@ -54,8 +54,8 @@ public:
     void clear();
     void resize(unsigned int x, unsigned int y);
     void fill(unsigned int tileindex);
-    int getMapTileIndexAt(unsigned int x, unsigned int y);
-    int getMapTileIndexAt(vector2i tpos);
+    int getMapTileIndexAt(unsigned int x, unsigned int y) const;
+    int getMapTileIndexAt(vector2i tpos) const;
     bool setTileAt(unsigned int x, unsigned int y, int ttile);
 
     // map objects

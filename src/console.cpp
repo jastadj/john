@@ -95,6 +95,7 @@ bool Console::initCommands()
 		newcmd->addCommand(new Command(Command::C_CMD, "item", " show item #", &showMapItem));
 		newcmd->addCommand(new Command(Command::C_CMD, "actors", "Print map actors", &printMapActors) );
 		newcmd->addCommand(new Command(Command::C_CMD, "actor", " show actor #", &showMapActor) );
+		newcmd->addCommand(new Command(Command::C_CMD, "export", "export map to ascii text file", &mapExport) );
 	m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
@@ -724,6 +725,18 @@ void showMapActor(std::vector<std::string> *cmd)
     // print item info
     (*alist)[actornum]->printInfo();
 }
+
+void mapExport(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
+
+    console->print("Exporting current map to ascii file...");
+    eptr->exportMapToASCIIFile(eptr->getCurrentMap());
+
+
+}
+
 
 void colortest(std::vector<std::string> *cmd)
 {

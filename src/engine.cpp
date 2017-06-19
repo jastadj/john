@@ -2,7 +2,7 @@
 #include "actor.hpp"
 #include <cmath>
 #include <sstream>
-
+#include <fstream>
 #include <iostream>
 
 using namespace tinyxml2;
@@ -879,6 +879,27 @@ bool Engine::generateLevel(Map *tmap)
 
     return true;
 }
+void Engine::exportMapToASCIIFile(const Map *tmap, std::string fname)
+{
+    if(!tmap) return;
+
+    std::ofstream ofile;
+    ofile.open(fname.c_str());
+
+    vector2i mapd = tmap->getDimensions();
+
+    for(int i = 0; i < mapd.y; i++)
+    {
+        for(int n = 0; n < mapd.x; n++)
+        {
+            ofile << char(m_Tiles[tmap->getMapTileIndexAt(n, i)].m_Glyph.m_Character);
+        }
+        ofile << "\n";
+    }
+
+    ofile.close();
+}
+
 bool Engine::lightPassesThroughAt(int x, int y, Map *tmap)
 {
     if(tmap == NULL) tmap = m_Levels[m_CurrentLevel];

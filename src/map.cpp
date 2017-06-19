@@ -126,7 +126,7 @@ void Map::fill(unsigned int tileindex)
     }
 }
 
-int Map::getMapTileIndexAt(unsigned int x, unsigned int y)
+int Map::getMapTileIndexAt(unsigned int x, unsigned int y) const
 {
     vector2i dims = getDimensions();
 
@@ -135,7 +135,7 @@ int Map::getMapTileIndexAt(unsigned int x, unsigned int y)
     return m_Array[y][x];
 }
 
-int Map::getMapTileIndexAt(vector2i tpos)
+int Map::getMapTileIndexAt(vector2i tpos) const
 {
     return getMapTileIndexAt(tpos.x, tpos.y);
 }

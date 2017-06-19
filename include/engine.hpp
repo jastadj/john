@@ -134,6 +134,9 @@ public:
     bool setDebug(E_DEBUG dtype, bool dstate);
     bool isDebug(E_DEBUG dtype);
 
+    // other
+    void exportMapToASCIIFile(const Map *tmap, std::string fname = std::string("mapexport.txt"));
+
     // give console access
 
 };
