@@ -302,11 +302,14 @@ void Engine::newGame()
     Map *newmap = new Map();
     newmap->resize(100,100);
     //generateLevel(newmap);
-    newmap->fill(2);
-    newmap->setTileAt(5,5,1);
-    addItemToMap(newmap, newItem(0), 2, 2);
-    addItemToMap(newmap, newItem(1), 4, 4);
-    addActorToMap(newmap, newActor(0), 0, 3);
+
+    // test level stuff
+    //newmap->fill(2);
+    //newmap->setTileAt(5,5,1);
+    //addItemToMap(newmap, newItem(0), 2, 2);
+    //addItemToMap(newmap, newItem(1), 4, 4);
+    //addActorToMap(newmap, newActor(0), 0, 3);
+    generateLevel(newmap);
     m_Levels.push_back(newmap);
 
     // init camera
@@ -892,7 +895,10 @@ void Engine::exportMapToASCIIFile(const Map *tmap, std::string fname)
     {
         for(int n = 0; n < mapd.x; n++)
         {
-            ofile << char(m_Tiles[tmap->getMapTileIndexAt(n, i)].m_Glyph.m_Character);
+            int ttilenum = tmap->getMapTileIndexAt(n, i);
+
+            if(ttilenum == 0) ofile << " ";
+            else ofile << char(m_Tiles[ttilenum].m_Glyph.m_Character);
         }
         ofile << "\n";
     }
