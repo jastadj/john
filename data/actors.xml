@@ -1,0 +1,17 @@
+<rl>
+    <actors>
+        <actor>
+            <id>0</id>
+            <name>rat</name>
+            <article>a</article>
+            <glyph>
+                <character>r</character>
+                <color>
+                    <fg>7</fg>
+                    <bg>0</bg>
+                    <bold>false</bold>
+                </color>
+            </glyph>
+        </actor>        
+    </actors>
+</rl>

@@ -55,7 +55,7 @@ void Engine::start()
     initData();
     //initTiles();
     //initItems();
-    initActors();
+    //initActors();
 
     newGame();
 
@@ -124,6 +124,8 @@ bool Engine::initData()
     if(!processXML(ITEMS_XML)) return false;
     // load actor data
 
+    // load actor data
+    if(!processXML(ACTORS_XML)) return false;
 
     // if no tiles are provided, create default tile
     if(m_Tiles.empty())
@@ -226,31 +228,6 @@ bool Engine::processXML(std::string xfile)
 
     return true;
 }
-
-bool Engine::initActors()
-{
-    static bool initialized = false;
-    if(initialized) return false;
-
-    m_Console->print("Loading actors...");
-
-    Actor *newactor = NULL;
-
-    newactor = new Actor();
-    newactor->setName("rat", "a");
-    newactor->setIcon('r');
-    newactor->setColors(COLOR_YELLOW, COLOR_BLACK, false);
-    m_Actors.push_back(newactor);
-
-
-    std::stringstream msg;
-    msg << m_Actors.size() << " actors loaded.";
-    m_Console->print(msg.str());
-
-    initialized = true;
-    return true;
-}
-
 
 void Engine::clearGame()
 {

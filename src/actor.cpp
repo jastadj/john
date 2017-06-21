@@ -30,6 +30,27 @@ void Actor::update()
 
 }
 
+bool Actor::loadFromXMLNode(XMLNode *tnode)
+{
+    XMLNode *anode = NULL;
+
+    anode = tnode->FirstChild();
+
+    // process base class
+    WorldObject::loadFromXMLNode(tnode);
+
+    while(anode != NULL)
+    {
+
+        // nothing to process that differs from worldobject load from xml
+
+
+        anode = anode->NextSibling();
+    }
+
+    return true;
+}
+
 void Actor::printInfo() const
 {
 	// print parent class

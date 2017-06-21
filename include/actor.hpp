@@ -32,6 +32,9 @@ public:
     bool isAlive();
 
     void update();
+    bool loadFromXMLNode(XMLNode *tnode);
     void printInfo() const;
+
+
 };
 #endif // CLASS_ACTOR

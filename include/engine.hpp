@@ -25,6 +25,7 @@
 
 #define TILES_XML ".\\data\\tiles.xml"
 #define ITEMS_XML ".\\data\\items.xml"
+#define ACTORS_XML ".\\data\\actors.xml"
 
 
 // namespace
@@ -49,10 +50,8 @@ private:
     bool initCurses();
     bool initConsole();
     bool initColors();
-    // data init should go away, use init data instead once
-    // everything has transferred over to a "process xml" type function
+
     bool initData();
-    bool initActors();
     bool processXML(std::string xfile);
 
     Camera m_Camera;
