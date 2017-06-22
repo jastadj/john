@@ -80,27 +80,36 @@ bool addMessage(std::vector<ConsoleElement*> *tlist, std::string str, ...);
 bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v);
 
 // commands
-bool printMenuHelp(const Command *tcmd = NULL);
-void printHelp(std::vector<std::string> *cmd);
-void itemMenu(std::vector<std::string> *cmd);
-void showItemInfo(std::vector<std::string> *cmd);
-void giveItemToPlayer(std::vector<std::string> *cmd);
-void printItemList(std::vector<std::string> *cmd);
-void printActorList(std::vector<std::string> *cmd);
-void showActorInfo(std::vector<std::string> *cmd);
-void printMap(std::vector<std::string> *cmd);
-void printMapItems(std::vector<std::string> *cmd);
-void showMapItem(std::vector<std::string> *cmd);
-void printMapActors(std::vector<std::string> *cmd);
-void showMapActor(std::vector<std::string> *cmd);
-void mapExport(std::vector<std::string> *cmd);
-void mytest(std::vector<std::string> *cmd);
-void colortest(std::vector<std::string> *cmd);
-void printPlayer(std::vector<std::string> *cmd);
-void dbgClip(std::vector<std::string> *cmd);
-void dbgLOS(std::vector<std::string> *cmd);
-void dbgLighting(std::vector<std::string> *cmd);
+class ConsoleFunction
+{
+private:
+    ConsoleFunction() {};
+    ~ConsoleFunction() {};
 
+public:
+    static bool printMenuHelp(const Command *tcmd = NULL);
+    static void printHelp(std::vector<std::string> *cmd);
+    static void itemMenu(std::vector<std::string> *cmd);
+    static void showItemInfo(std::vector<std::string> *cmd);
+    static void giveItemToPlayer(std::vector<std::string> *cmd);
+    static void printItemList(std::vector<std::string> *cmd);
+    static void printActorList(std::vector<std::string> *cmd);
+    static void showActorInfo(std::vector<std::string> *cmd);
+    static void printMap(std::vector<std::string> *cmd);
+    static void printMapItems(std::vector<std::string> *cmd);
+    static void showMapItem(std::vector<std::string> *cmd);
+    static void printMapActors(std::vector<std::string> *cmd);
+    static void showMapActor(std::vector<std::string> *cmd);
+    static void mapExport(std::vector<std::string> *cmd);
+    static void mapRegen(std::vector<std:string>)
+    static void mytest(std::vector<std::string> *cmd);
+    static void colortest(std::vector<std::string> *cmd);
+    static void printPlayer(std::vector<std::string> *cmd);
+    static void dbgClip(std::vector<std::string> *cmd);
+    static void dbgLOS(std::vector<std::string> *cmd);
+    static void dbgLighting(std::vector<std::string> *cmd);
+
+};
 
 
 #endif // CLASS_CONSOLE

@@ -1010,11 +1010,6 @@ Item *Engine::pickupItemFromMapAt(Actor *tactor, Map *tlevel, vector2i tpos)
     return NULL;
 }
 
-Actor *Engine::getPlayer()
-{
-	return m_Player;
-}
-
 void Engine::printInventory(std::vector<Item*> *ilist)
 {
     if(ilist == NULL) return;

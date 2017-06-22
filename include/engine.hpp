@@ -108,6 +108,9 @@ private:
 
     // debug options
     std::vector<bool> m_DebugFlags;
+    bool toggleDebug(E_DEBUG dtype);
+    bool setDebug(E_DEBUG dtype, bool dstate);
+    bool isDebug(E_DEBUG dtype);
 
 public:
     static Engine *getInstance();
@@ -119,24 +122,15 @@ public:
     const Map *getCurrentMap() { return m_Levels[m_CurrentLevel];}
     const std::vector<Item*> *getItemList() { return &m_Items;}
     const std::vector<Actor*> *getActorList() { return &m_Actors;}
-    Actor *getPlayer();
     unsigned int getPlayerMoveCount() const { return m_PlayerMoveCount;}
-
-    // actor
-
 
     // create item
     Item *newItem(int itmindex);
 
-    // debug
-    bool toggleDebug(E_DEBUG dtype);
-    bool setDebug(E_DEBUG dtype, bool dstate);
-    bool isDebug(E_DEBUG dtype);
-
     // other
     void exportMapToASCIIFile(const Map *tmap, std::string fname = std::string("mapexport.txt"));
 
-    // give console access
-
+    // give console functions access
+    friend ConsoleFunction;
 };
 #endif // CLASS_ENGINE

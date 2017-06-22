@@ -75,46 +75,46 @@ Console *Console::getInstance()
 
 bool Console::initCommands()
 {
-    Command *newcmd = new Command(Command::C_CMD, "help", "Print help menu", &printHelp);
+    Command *newcmd = new Command(Command::C_CMD, "help", "Print help menu", &ConsoleFunction::printHelp);
     m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "item", "Item menu", NULL);
-        newcmd->addCommand(new Command(Command::C_CMD, "list", "list items", &printItemList));
-        newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show item info (see list)", &showItemInfo) );
-        newcmd->addCommand(new Command(Command::C_CMD, "give", "give item # to player", &giveItemToPlayer) );
+        newcmd->addCommand(new Command(Command::C_CMD, "list", "list items", &ConsoleFunction::printItemList));
+        newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show item info (see list)", &ConsoleFunction::showItemInfo) );
+        newcmd->addCommand(new Command(Command::C_CMD, "give", "give item # to player", &ConsoleFunction::giveItemToPlayer) );
     m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "actor", "Actor Menu", NULL);
-        newcmd->addCommand(new Command(Command::C_CMD, "list", "list actors", &printActorList));
-        newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show actor info (see list)", &showActorInfo));
+        newcmd->addCommand(new Command(Command::C_CMD, "list", "list actors", &ConsoleFunction::printActorList));
+        newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show actor info (see list)", &ConsoleFunction::showActorInfo));
     m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "map", "Map menu", NULL);
-		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print map info", &printMap) );
-		newcmd->addCommand(new Command(Command::C_CMD, "items", "Print map items", &printMapItems) );
-		newcmd->addCommand(new Command(Command::C_CMD, "item", " show item #", &showMapItem));
-		newcmd->addCommand(new Command(Command::C_CMD, "actors", "Print map actors", &printMapActors) );
-		newcmd->addCommand(new Command(Command::C_CMD, "actor", " show actor #", &showMapActor) );
-		newcmd->addCommand(new Command(Command::C_CMD, "export", "export map to ascii text file", &mapExport) );
+		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print map info", &ConsoleFunction::printMap) );
+		newcmd->addCommand(new Command(Command::C_CMD, "items", "Print map items", &ConsoleFunction::printMapItems) );
+		newcmd->addCommand(new Command(Command::C_CMD, "item", " show item #", &ConsoleFunction::showMapItem));
+		newcmd->addCommand(new Command(Command::C_CMD, "actors", "Print map actors", &ConsoleFunction::printMapActors) );
+		newcmd->addCommand(new Command(Command::C_CMD, "actor", " show actor #", &ConsoleFunction::showMapActor) );
+		newcmd->addCommand(new Command(Command::C_CMD, "export", "export map to ascii text file", &ConsoleFunction::mapExport) );
 	m_CommandList.push_back(newcmd);
 
     newcmd = new Command(Command::C_SUBMENU, "player", "Player menu", NULL);
-		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print player info", &printPlayer) );
+		newcmd->addCommand(new Command(Command::C_CMD, "show", "Print player info", &ConsoleFunction::printPlayer) );
 	m_CommandList.push_back(newcmd);
 
-    newcmd = new Command(Command::C_CMD, "clip", "toggle clipping through walls", &dbgClip);
+    newcmd = new Command(Command::C_CMD, "clip", "toggle clipping through walls", &ConsoleFunction::dbgClip);
     m_CommandList.push_back(newcmd);
 
-    newcmd = new Command(Command::C_CMD, "los", "toggle line of sight", &dbgLOS);
+    newcmd = new Command(Command::C_CMD, "los", "toggle line of sight", &ConsoleFunction::dbgLOS);
     m_CommandList.push_back(newcmd);
 
-    newcmd = new Command(Command::C_CMD, "lighting", "toggle lighting", &dbgLighting);
+    newcmd = new Command(Command::C_CMD, "lighting", "toggle lighting", &ConsoleFunction::dbgLighting);
     m_CommandList.push_back(newcmd);
 
-    newcmd = new Command(Command::C_CMD, "test", "A test", &mytest);
+    newcmd = new Command(Command::C_CMD, "test", "A test", &ConsoleFunction::mytest);
     m_CommandList.push_back(newcmd);
 
-    newcmd = new Command(Command::C_CMD, "colortest", "Show color table", &colortest);
+    newcmd = new Command(Command::C_CMD, "colortest", "Show color table", &ConsoleFunction::colortest);
     m_CommandList.push_back(newcmd);
 
     return true;
@@ -220,7 +220,7 @@ bool Console::parseCommand(std::string tstr)
         // if the command is a submenu and doesn't have a function, print submenu help
         if(tcmd->getType() == Command::C_SUBMENU && !tcmd->hasFunction())
         {
-            printMenuHelp(tcmd);
+            ConsoleFunction::printMenuHelp(tcmd);
         }
         // otherwise execute command function
         else tcmd->execute(&cmd);
@@ -405,7 +405,7 @@ bool addMessageV(std::vector<ConsoleElement*> *tlist, std::string str, va_list v
 
 ////////////////////////////////////////////////////////////////
 //
-bool printMenuHelp(const Command *tcmd)
+bool ConsoleFunction::printMenuHelp(const Command *tcmd)
 {
     Console *console = Console::getInstance();
     const std::vector<Command*> *cmdlist = NULL;
@@ -451,12 +451,12 @@ bool printMenuHelp(const Command *tcmd)
     return true;
 }
 
-void printHelp(std::vector<std::string> *cmd)
+void ConsoleFunction::printHelp(std::vector<std::string> *cmd)
 {
     printMenuHelp(NULL);
 }
 
-void mytest(std::vector<std::string> *cmd)
+void ConsoleFunction::mytest(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
 
@@ -464,14 +464,14 @@ void mytest(std::vector<std::string> *cmd)
 
 }
 
-void itemMenu(std::vector<std::string> *cmd)
+void ConsoleFunction::itemMenu(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
 
 
 }
 
-void printItemList(std::vector<std::string> *cmd)
+void ConsoleFunction::printItemList(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -486,20 +486,20 @@ void printItemList(std::vector<std::string> *cmd)
     }
 }
 
-void printPlayer(std::vector<std::string> *cmd)
+void ConsoleFunction::printPlayer(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
 
-    const Actor *player = eptr->getPlayer();
-    player->printInfo();
+    //const Actor *player = eptr->getPlayer();
+    eptr->m_Player->printInfo();
 
     std::stringstream ss;
     ss << "Player Move Count:" << eptr->getPlayerMoveCount();
     console->print(ss.str());
 }
 
-void showItemInfo(std::vector<std::string> *cmd)
+void ConsoleFunction::showItemInfo(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -528,7 +528,7 @@ void showItemInfo(std::vector<std::string> *cmd)
     (*ilist)[itemnum]->printInfo();
 }
 
-void giveItemToPlayer(std::vector<std::string> *cmd)
+void ConsoleFunction::giveItemToPlayer(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -555,14 +555,14 @@ void giveItemToPlayer(std::vector<std::string> *cmd)
 
     // give item to player
     Item *newitem = eptr->newItem(itemnum);
-    eptr->getPlayer()->addItemToInventory(newitem);
+    eptr->m_Player->addItemToInventory(newitem);
 
     std::stringstream ss;
     ss << newitem->getName() << " added to player";
     console->print(ss.str());
 }
 
-void printActorList(std::vector<std::string> *cmd)
+void ConsoleFunction::printActorList(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -577,7 +577,7 @@ void printActorList(std::vector<std::string> *cmd)
     }
 }
 
-void showActorInfo(std::vector<std::string> *cmd)
+void ConsoleFunction::showActorInfo(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -606,13 +606,13 @@ void showActorInfo(std::vector<std::string> *cmd)
     (*alist)[anum]->printInfo();
 }
 
-void printMap(std::vector<std::string> *cmd)
+void ConsoleFunction::printMap(std::vector<std::string> *cmd)
 {
     Engine *eptr = Engine::getInstance();
     eptr->getCurrentMap()->printInfo();
 }
 
-void printMapItems(std::vector<std::string> *cmd)
+void ConsoleFunction::printMapItems(std::vector<std::string> *cmd)
 {
     Engine *eptr = Engine::getInstance();
     Console *console = Console::getInstance();
@@ -640,7 +640,7 @@ void printMapItems(std::vector<std::string> *cmd)
 
 }
 
-void showMapItem(std::vector<std::string> *cmd)
+void ConsoleFunction::showMapItem(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -669,7 +669,7 @@ void showMapItem(std::vector<std::string> *cmd)
     (*ilist)[itemnum]->printInfo();
 }
 
-void printMapActors(std::vector<std::string> *cmd)
+void ConsoleFunction::printMapActors(std::vector<std::string> *cmd)
 {
     Engine *eptr = Engine::getInstance();
     Console *console = Console::getInstance();
@@ -697,7 +697,7 @@ void printMapActors(std::vector<std::string> *cmd)
 
 }
 
-void showMapActor(std::vector<std::string> *cmd)
+void ConsoleFunction::showMapActor(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -726,7 +726,7 @@ void showMapActor(std::vector<std::string> *cmd)
     (*alist)[actornum]->printInfo();
 }
 
-void mapExport(std::vector<std::string> *cmd)
+void ConsoleFunction::mapExport(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -738,7 +738,7 @@ void mapExport(std::vector<std::string> *cmd)
 }
 
 
-void colortest(std::vector<std::string> *cmd)
+void ConsoleFunction::colortest(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *eptr = Engine::getInstance();
@@ -761,7 +761,7 @@ void colortest(std::vector<std::string> *cmd)
     }
 }
 
-void dbgClip(std::vector<std::string> *cmd)
+void ConsoleFunction::dbgClip(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *teng = Engine::getInstance();
@@ -772,7 +772,7 @@ void dbgClip(std::vector<std::string> *cmd)
     else console->print("noclip disabled");
 }
 
-void dbgLOS(std::vector<std::string> *cmd)
+void ConsoleFunction::dbgLOS(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *teng = Engine::getInstance();
@@ -783,7 +783,7 @@ void dbgLOS(std::vector<std::string> *cmd)
     else console->print("LOS enabled");
 }
 
-void dbgLighting(std::vector<std::string> *cmd)
+void ConsoleFunction::dbgLighting(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
     Engine *teng = Engine::getInstance();
