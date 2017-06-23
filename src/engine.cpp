@@ -790,6 +790,10 @@ bool Engine::generateLevel(Map *tmap)
     vector2i mapdims = tmap->getDimensions();
     long int maparea = mapdims.x * mapdims.y;
 
+    // clear map data
+    tmap->clear();
+
+
     // generation parameters
     bool allowoverlap = true; // allow tiles to be placed over tiles
     bool addwallborder = true;

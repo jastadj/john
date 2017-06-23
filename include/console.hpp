@@ -101,7 +101,7 @@ public:
     static void printMapActors(std::vector<std::string> *cmd);
     static void showMapActor(std::vector<std::string> *cmd);
     static void mapExport(std::vector<std::string> *cmd);
-    static void mapRegen(std::vector<std:string>)
+    static void mapRegen(std::vector<std::string> *cmd);
     static void mytest(std::vector<std::string> *cmd);
     static void colortest(std::vector<std::string> *cmd);
     static void printPlayer(std::vector<std::string> *cmd);

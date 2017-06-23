@@ -95,6 +95,7 @@ bool Console::initCommands()
 		newcmd->addCommand(new Command(Command::C_CMD, "item", " show item #", &ConsoleFunction::showMapItem));
 		newcmd->addCommand(new Command(Command::C_CMD, "actors", "Print map actors", &ConsoleFunction::printMapActors) );
 		newcmd->addCommand(new Command(Command::C_CMD, "actor", " show actor #", &ConsoleFunction::showMapActor) );
+		newcmd->addCommand(new Command(Command::C_CMD, "regen", "regenerate current map", &ConsoleFunction::mapRegen) );
 		newcmd->addCommand(new Command(Command::C_CMD, "export", "export map to ascii text file", &ConsoleFunction::mapExport) );
 	m_CommandList.push_back(newcmd);
 
@@ -737,6 +738,15 @@ void ConsoleFunction::mapExport(std::vector<std::string> *cmd)
 
 }
 
+void ConsoleFunction::mapRegen(std::vector<std::string> *cmd)
+{
+    Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
+
+    console->print("Regenerating map...");
+
+    eptr->generateLevel(eptr->m_Levels[eptr->m_CurrentLevel]);
+}
 
 void ConsoleFunction::colortest(std::vector<std::string> *cmd)
 {
