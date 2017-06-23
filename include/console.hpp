@@ -92,7 +92,7 @@ private:
 public:
     static bool printMenuHelp(const Command *tcmd = NULL);
     static void printHelp(std::vector<std::string> *cmd);
-    static void itemMenu(std::vector<std::string> *cmd);
+    static void gameNew(std::vector<std::string> *cmd);
     static void showItemInfo(std::vector<std::string> *cmd);
     static void giveItemToPlayer(std::vector<std::string> *cmd);
     static void printItemList(std::vector<std::string> *cmd);

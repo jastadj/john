@@ -81,7 +81,11 @@ bool Console::initCommands()
     Command *newcmd = new Command(Command::C_CMD, "help", "Print help menu", &ConsoleFunction::printHelp);
     m_CommandList.push_back(newcmd);
 
-    newcmd = new Command(Command::C_SUBMENU, "item", "Item menu", NULL);
+    newcmd = new Command(Command::C_SUBMENU, "game", "Game Menu", NULL);
+        newcmd->addCommand(new Command(Command::C_CMD, "new", "start new game", &ConsoleFunction::gameNew));
+    m_CommandList.push_back(newcmd);
+
+    newcmd = new Command(Command::C_SUBMENU, "item", "Item Menu", NULL);
         newcmd->addCommand(new Command(Command::C_CMD, "list", "list items", &ConsoleFunction::printItemList));
         newcmd->addCommand(new Command(Command::C_CMD, "show", "show # - show item info (see list)", &ConsoleFunction::showItemInfo) );
         newcmd->addCommand(new Command(Command::C_CMD, "give", "give item # to player", &ConsoleFunction::giveItemToPlayer) );
@@ -521,11 +525,12 @@ void ConsoleFunction::mytest(std::vector<std::string> *cmd)
 
 }
 
-void ConsoleFunction::itemMenu(std::vector<std::string> *cmd)
+void ConsoleFunction::gameNew(std::vector<std::string> *cmd)
 {
     Console *console = Console::getInstance();
+    Engine *eptr = Engine::getInstance();
 
-
+    eptr->newGame();
 }
 
 void ConsoleFunction::printItemList(std::vector<std::string> *cmd)
