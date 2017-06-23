@@ -59,9 +59,12 @@ private:
     std::vector<Command*> m_CommandList;
 
     std::string m_PromptString;
+
+    // console message buffer
     std::vector<ConsoleElement*> m_Buffer;
-
-
+    // console command buffer
+    std::vector<std::string> m_CmdBuffer;
+    int m_CmdBufferIndex;
 
 public:
     static Console *getInstance();

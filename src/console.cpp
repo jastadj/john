@@ -54,6 +54,9 @@ Console::Console()
 {
     m_PromptString = ">";
 
+    // use to navigate command buffer list, -1 = not navigating
+    m_CmdBufferIndex = -1;
+
     //initialize commands
     initCommands();
 }
@@ -132,6 +135,9 @@ void Console::openConsole()
     echo();
     scrollok(stdscr, true);
 
+    // reset command buffer index
+    m_CmdBufferIndex = -1;
+
     while(!quit)
     {
         clear();
@@ -153,12 +159,23 @@ void Console::openConsole()
 
             if(csize > 0) command.resize(csize-1);
 
+            // reset cmd buffer index
+            m_CmdBufferIndex = -1;
+
         }
         else if (ch == 10) // return
         {
 
             // add command to buffer
             print(m_PromptString + command);
+
+            // add command to command buffer
+            if(command != "")
+            {
+                m_CmdBuffer.push_back(command);
+                m_CmdBufferIndex = -1;
+            }
+
 
             // parse command
             parseCommand(command);
@@ -169,8 +186,47 @@ void Console::openConsole()
             // clear command string
             command.erase();
         }
+        // if user presses up or down, navigate command buffer
+        else if(ch == KEY_UP || ch == 56)
+        {
+            // command buffer is not empty
+            if(!m_CmdBuffer.empty())
+            {
+                if(m_CmdBufferIndex == -1) m_CmdBufferIndex = int(m_CmdBuffer.size()-1);
+                else
+                {
+                    m_CmdBufferIndex--;
+
+                    if(m_CmdBufferIndex < 0) m_CmdBufferIndex = 0;
+                }
+                command = m_CmdBuffer[m_CmdBufferIndex];
+            }
+
+        }
+        else if(ch == KEY_DOWN || ch == 50)
+        {
+            // command buffer is not empty
+            if(!m_CmdBuffer.empty())
+            {
+                if(m_CmdBufferIndex == -1) m_CmdBufferIndex = int(m_CmdBuffer.size()-1);
+                else
+                {
+                    m_CmdBufferIndex++;
+
+                    if(m_CmdBufferIndex > int(m_CmdBuffer.size()-1) ) m_CmdBufferIndex = int(m_CmdBuffer.size()-1);
+                }
+                command = m_CmdBuffer[m_CmdBufferIndex];
+            }
+
+        }
         // if no terminal keys, just add character to command
-        else command.push_back(char(ch));
+        else
+        {
+            // reset command buffer index
+            m_CmdBufferIndex = -1;
+
+            command.push_back(char(ch));
+        }
     }
 }
 
